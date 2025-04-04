@@ -117,7 +117,8 @@
     font-size: 24px;
     border: none;
     border-radius: 50%;
-    padding: 12px;
+    width: 3rem;
+    height: 3rem;
     cursor: pointer;
     margin: 0 15px;
     transition: transform 0.2s, background-color 0.3s;
@@ -229,3 +230,145 @@
         font-size: 14px;
     }
 }
+/* Comments Section */
+.comments-section {
+    background-color: #1a1a1a;
+    color: #e0e0ff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+}
+
+.comments-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #c084fc;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 2rem;
+}
+
+.comment {
+    background-color: #2a2a2a;
+    border-left: 4px solid #a855f7;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s ease;
+}
+
+.comment:hover {
+    background-color: #333;
+}
+
+.comment p {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+}
+
+.comment small {
+    font-size: 0.85rem;
+    color: #b8a3d7;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.comment-form textarea {
+    resize: none;
+    height: 100px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #a855f7;
+    background-color: #1a1a1a;
+    color: #e0e0ff;
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: #c084fc;
+    box-shadow: 0 0 5px #a855f7;
+}
+
+.comment-form button {
+    align-self: flex-end;
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: bold;
+    background: linear-gradient(145deg, #a855f7, #7e22ce);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.comment-form button:hover {
+    background: linear-gradient(145deg, #9333ea, #6b21a8);
+    transform: scale(1.03);
+}
+
+.comment-form button:disabled {
+    background: #5b21b6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fullscreen-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.close-fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.fullscreen-toggle {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    padding: 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    z-index: 10;
+}
+
+.fullscreen-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+

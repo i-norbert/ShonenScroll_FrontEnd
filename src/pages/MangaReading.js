@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./MangaPage.css";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "../UserContext";
 
 const API_BASE = "https://shonenscroll-backend.onrender.com";
 
@@ -14,27 +15,23 @@ const MangaPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [newComment, setNewComment] = useState("");
+    const [commentSubmitting, setCommentSubmitting] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false); // ← fullscreen state
+
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         const fetchManga = async () => {
             try {
                 const response = await fetch(`${API_BASE}/manga/${id}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
+                if (!response.ok) throw new Error("Failed to fetch data");
                 const data = await response.json();
-
-                const sortedChapters = data.Chapters.sort((a, b) => {
-                    const aNum = parseInt(a.title);
-                    const bNum = parseInt(b.title);
-                    return aNum - bNum;
-                });
-                data.Chapters = sortedChapters;
-
+                data.Chapters.sort((a, b) => parseInt(a.title) - parseInt(b.title));
                 setManga(data);
-                setLoading(false);
             } catch (err) {
                 setError(err.message);
+            } finally {
                 setLoading(false);
             }
         };
@@ -42,11 +39,10 @@ const MangaPage = () => {
         fetchManga();
     }, [id]);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-    if (!manga || !manga.Chapters || manga.Chapters.length === 0) return <p>No chapters found.</p>;
-
-    const mangaPages = manga.Chapters[currentChapter]?.Pages || [];
+    const mangaPages = manga?.Chapters[currentChapter]?.Pages || [];
+    const currentComments = (manga?.Chapters[currentChapter]?.Comments || []).sort(
+        (a, b) => b.likes - a.likes
+    );
 
     const nextPage = () => {
         if (currentPage < mangaPages.length - 1) setCurrentPage(currentPage + 1);
@@ -75,6 +71,38 @@ const MangaPage = () => {
         setCurrentPage(0);
     };
 
+    const handleCommentSubmit = async () => {
+        if (!newComment.trim() || !user?.id) return;
+
+        setCommentSubmitting(true);
+        const chapterId = manga.Chapters[currentChapter].id;
+
+        try {
+            await fetch(`${API_BASE}/manga/chapter/${chapterId}/comment`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    cuserId: user.id,
+                    content: newComment,
+                }),
+            });
+
+            const response = await fetch(`${API_BASE}/manga/${id}`);
+            const updatedData = await response.json();
+            updatedData.Chapters.sort((a, b) => parseInt(a.title) - parseInt(b.title));
+            setManga(updatedData);
+            setNewComment("");
+        } catch {
+            alert("Failed to post comment");
+        } finally {
+            setCommentSubmitting(false);
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!manga || !manga.Chapters.length) return <p>No chapters found.</p>;
+
     return (
         <div className="manga-page-container">
             <div className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
@@ -101,17 +129,24 @@ const MangaPage = () => {
 
             <div className="manga-content">
                 <h2>Chapter {manga.Chapters[currentChapter].title}</h2>
+
                 <div className="manga-page-wrapper">
                     <button className="page-button left" onClick={prevPage} disabled={currentPage === 0}>
                         ❮
                     </button>
                     <div className="manga-page-content">
                         {mangaPages.length > 0 ? (
-                            <img
-                                src={`${API_BASE}${mangaPages[currentPage].imageUrl}`}
-                                alt={`Manga Page ${currentPage + 1}`}
-                                className="manga-image enlarged"
-                            />
+                            <>
+                                <img
+                                    src={`${API_BASE}${mangaPages[currentPage].imageUrl}`}
+                                    alt={`Manga Page ${currentPage + 1}`}
+                                    className="manga-image enlarged"
+                                />
+                                <button className="fullscreen-toggle" onClick={() => setIsFullscreen(true)} title="Enter Fullscreen">
+                                    <FontAwesomeIcon icon={faChevronRight} rotation={90} />
+                                </button>
+
+                            </>
                         ) : (
                             <p>No pages available</p>
                         )}
@@ -133,7 +168,60 @@ const MangaPage = () => {
                         Next Chapter
                     </button>
                 </div>
+
+                <div className="comments-section">
+                    <h3>Comments</h3>
+                    {user ? (
+                        <div className="comment-form">
+                            <textarea
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                placeholder="Write a comment..."
+                            />
+                            <button onClick={handleCommentSubmit} disabled={commentSubmitting}>
+                                {commentSubmitting ? "Posting..." : "Post Comment"}
+                            </button>
+                        </div>
+                    ) : (
+                        <p>Please log in to comment.</p>
+                    )}
+                    {currentComments.length === 0 ? (
+                        <p>No comments yet. Be the first!</p>
+                    ) : (
+                        <ul className="comment-list">
+                            {currentComments.map((comment) => (
+                                <li key={comment.id} className="comment">
+                                    <p>{comment.content}</p>
+                                    <small>Likes: {comment.likes || 0}</small>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </div>
+
+            {isFullscreen && (
+                <div className="fullscreen-overlay">
+                    <button className="close-fullscreen" onClick={() => setIsFullscreen(false)}>
+                        <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                    <button className="page-button left" onClick={prevPage} disabled={currentPage === 0}>
+                        ❮
+                    </button>
+                    <img
+                        src={`${API_BASE}${mangaPages[currentPage].imageUrl}`}
+                        alt={`Page ${currentPage + 1}`}
+                        className="fullscreen-image"
+                    />
+                    <button
+                        className="page-button right"
+                        onClick={nextPage}
+                        disabled={currentPage >= mangaPages.length - 1}
+                    >
+                        ❯
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

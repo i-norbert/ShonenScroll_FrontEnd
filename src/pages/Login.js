@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useState, useContext } from "react";
 import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {UserContext} from "../UserContext";
 
 const API_BASE = "https://shonenscroll-backend.onrender.com";
 
@@ -11,45 +12,29 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [loggedIn, setLoggedIn] = useState(false)
+
+    const { login } = useContext(UserContext); // ← use context
     const navigate = useNavigate();
 
-    useEffect(() => {},[loggedIn])
-    //TODO:
-    // NEM GÁNY MEGOLDÁST HASZNÁLNI
     const handleLogin = async () => {
         setError("");
         setSuccess("");
+
         try {
-            // Sending POST request to login API
             const response = await fetch(`${API_BASE}/auth/login`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
+            if (!response.ok) throw new Error(data.message || "Login failed");
 
-            // Check if response is not okay
-            if (!response.ok) {
-                throw new Error(data.message || "Login failed");
-            }
+            login(data.userId); // ← set user in context
 
-            // Save token and userId to sessionStorage
-            sessionStorage.setItem("token", data.token);
-            sessionStorage.setItem("userId", data.userId);
-            setLoggedIn(true)
-            
-
-            // Display success message
             setSuccess("Login successful!");
-
-            setTimeout(() => { navigate("/", { replace: true });window.location.reload() }, 1000);
-
+            setTimeout(() => navigate("/", { replace: true }), 1000);
         } catch (err) {
-            // Handle error and display the error message
             setError(err.message);
         }
     };
@@ -57,12 +42,8 @@ export default function Login() {
     return (
         <div className="Container">
             <h2>Login</h2>
-            <br />
-            {/* Display error or success messages */}
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
-
-            {/* Email input field */}
             <TextField
                 className="textfield"
                 label="Email"
@@ -73,8 +54,6 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
             />
             <br />
-
-            {/* Password input field */}
             <TextField
                 className="textfield"
                 label="Password"
@@ -87,8 +66,6 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <br />
-
-            {/* Login button */}
             <Button variant="contained" color="success" sx={{ ml: 30 }} onClick={handleLogin}>
                 Login
             </Button>
