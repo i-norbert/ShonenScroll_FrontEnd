@@ -1,32 +1,53 @@
-.vmi{
-    width: 70%;
-    
-    margin-left: 150px;
-    font-size: 60px;
-    
-}
-.Container{
-    background-color: #666;
-    box-shadow: 2px 2px 2px #555;
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+
+.Container {
+    background: rgb(82,5,123);
+    background: linear-gradient(180deg, rgba(82,5,123,1) 10%, rgba(0,0,0,1) 100%);
+    color: #BC6FF1;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    margin-top: 10%;
-    width: 50%;
-    margin-left: 25%;
-    height: 400PX;
-    border-radius: 20px;
-    padding: 50px;
-}
-h2{
-    color: white;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    font-size: 60px;
-    text-shadow: 4px 4px 4px #333;
+    font-family: 'Carter One', sans-serif;
+    padding: 0 20px;
 }
-body{
-    background-color: #444;
+
+.Container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #fff;
 }
-Button{
-    width: 30%;
-    
+
+.textfield {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.textfield .MuiInput-underline:before {
+    border-bottom: 2px solid #bb86fc !important;
+}
+
+.textfield .MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom: 2px solid #d08aff !important;
+}
+
+.textfield .MuiInput-underline:after {
+    border-bottom: 2px solid #bb86fc !important;
+}
+
+button.MuiButton-containedSuccess {
+    font-family: 'Carter One', cursive !important;
+    text-transform: uppercase;
+    background-color: #6a0dad !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+
+button.MuiButton-containedSuccess:hover {
+    background-color: #bb86fc !important;
+    transform: scale(1.05);
 }

@@ -2,24 +2,30 @@ import { Outlet, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./navstyle.css";
 
+
 const Layout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    const [storedUser, setStoredUser] = useState([]);
     useEffect(() => {
-        // Check sessionStorage for login state
-        const storedUser = sessionStorage.getItem("loggedInUser");
-        if (storedUser) {
+        const token = sessionStorage.getItem("token");
+        const userId = sessionStorage.getItem("userId");
+        if (token && userId) {
+            setStoredUser({ token, userId });
             setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
         }
     }, []);
 
     const handleLogout = () => {
-        sessionStorage.removeItem("loggedInUser"); // Remove login state
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("userId");// Remove login state
         setIsLoggedIn(false);
     };
 
     return (
         <>
+
             <nav className="NavBar">
                 <ul>
                     <li>
@@ -29,10 +35,10 @@ const Layout = () => {
                         <Link to="/latest">Latest</Link>
                     </li>
                     <li>
-                        <Link to="/hottest">Hottest</Link>
+                        <Link  to="/hottest">Hottest</Link>
                     </li>
                     <li>
-                        <Link to="/search">Search</Link>
+                        <Link  to="/search">Search</Link>
                     </li>
 
                     {!isLoggedIn ? (
@@ -46,7 +52,7 @@ const Layout = () => {
                         </>
                     ) : (
                         <li className="reg">
-                            <button onClick={handleLogout} className="logout-btn">Logout</button>
+                            <a onClick={handleLogout} className="logout-btn">Logout</a>
                         </li>
                     )}
                 </ul>

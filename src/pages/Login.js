@@ -1,64 +1,66 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import {useNavigate} from "react-router-dom";
 
 const API_BASE = "https://shonenscroll-backend.onrender.com";
 
-export default function Register() {
-    const [username, setUsername] = useState("");
+export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [loggedIn, setLoggedIn] = useState(false)
+    const navigate = useNavigate();
 
-    const handleRegister = async () => {
+    useEffect(() => {},[loggedIn])
+    //TODO:
+    // NEM GÁNY MEGOLDÁST HASZNÁLNI
+    const handleLogin = async () => {
         setError("");
         setSuccess("");
         try {
-            // Sending POST request to register API
-            const response = await fetch(`${API_BASE}/auth/register`, {
+            // Sending POST request to login API
+            const response = await fetch(`${API_BASE}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
 
-            // If the response is not successful, show an error
+            // Check if response is not okay
             if (!response.ok) {
-                throw new Error(data.message || "Registration failed");
+                throw new Error(data.message || "Login failed");
             }
 
-            // Show success message if registration is successful
-            setSuccess("User registered successfully!");
+            // Save token and userId to sessionStorage
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("userId", data.userId);
+            setLoggedIn(true)
+            
+
+            // Display success message
+            setSuccess("Login successful!");
+
+            setTimeout(() => { navigate("/", { replace: true });window.location.reload() }, 1000);
+
         } catch (err) {
-            // Catch and display the error
+            // Handle error and display the error message
             setError(err.message);
         }
     };
 
     return (
         <div className="Container">
-            <h2>Register</h2>
+            <h2>Login</h2>
             <br />
             {/* Display error or success messages */}
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
-
-            {/* Username input field */}
-            <TextField
-                className="textfield"
-                label="Username"
-                variant="standard"
-                color="secondary"
-                sx={{ input: { color: "white" } }}
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <br />
 
             {/* Email input field */}
             <TextField
@@ -86,9 +88,9 @@ export default function Register() {
             />
             <br />
 
-            {/* Register button */}
-            <Button variant="contained" color="success" sx={{ ml: 30 }} onClick={handleRegister}>
-                Register
+            {/* Login button */}
+            <Button variant="contained" color="success" sx={{ ml: 30 }} onClick={handleLogin}>
+                Login
             </Button>
         </div>
     );

@@ -1,7 +1,6 @@
-/* Import Carter One font */
 @import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
 
-/* Reset default styles */
+/* === Reset & Base Styles === */
 * {
     margin: 0;
     padding: 0;
@@ -9,60 +8,190 @@
     font-family: 'Carter One', cursive;
 }
 
+body {
+    background-color: #121212;
+    color: white;
+}
+
+/* === Navbar Styles === */
 .NavBar {
-    background: linear-gradient(135deg, #4b0082, #1e1e1e);
-    padding: 15px 20px;
+    background: linear-gradient(135deg, #3c1361, #1a1a1a);
+    padding: 15px 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-    border-bottom: 3px solid #8a2be2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid #ff00fb;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .NavBar ul {
     list-style: none;
     display: flex;
-    gap: 25px;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .NavBar ul li {
     position: relative;
 }
 
-.NavBar ul li a, .logout-btn {
-    text-decoration: none;
+/* === Links & Button Styles === */
+.NavBar a,
+.logout-btn {
+    font-size: 17px;
+    padding: 10px 18px;
     color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 12px 18px;
-    transition: all 0.3s ease-in-out;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
     border: 2px solid transparent;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
-.NavBar ul li a:hover, .logout-btn:hover {
-    background: #8a2be2;
-    border-color: white;
-    transform: translateY(-2px);
-}
-
-.reg a, .logout-btn {
-    background: #8a2be2;
-    border: 2px solid #fff;
-}
-
-.reg a:hover, .logout-btn:hover {
-    background: #6a1cb8;
-    border-color: #ffcc00;
-    transform: scale(1.05);
+.NavBar a:hover,
+.logout-btn:hover {
+    background-color: #8a2be2;
+    border-color: #ff00fb;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 10px #8a2be2aa;
 }
 
 .logout-btn {
     cursor: pointer;
-    font-size: 16px;
-    padding: 10px 15px;
-    border: none;
-    color: white;
-    font-weight: bold;
+}
+
+/* === Register/Login Special Styling === */
+li.reg a,
+li.reg .logout-btn {
+    background: #8a2be2;
+    border: 2px solid #fff;
+    transition: all 0.3s ease;
+}
+
+li.reg a:hover,
+li.reg .logout-btn:hover {
+    background: #6a1cb8;
+    border-color: #ff00fb;
+    transform: scale(1.05);
+}
+
+/* === Responsive Styling === */
+@media (max-width: 1024px) {
+    .NavBar a,
+    .logout-btn {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .NavBar {
+        padding: 12px 20px;
+        flex-direction: column;
+    }
+
+    .NavBar ul {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .NavBar a,
+    .logout-btn {
+        width: 100%;
+        text-align: center;
+        font-size: 15px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .NavBar {
+        padding: 10px 15px;
+    }
+
+    .NavBar a,
+    .logout-btn {
+        font-size: 14px;
+        padding: 10px;
+        border-radius: 8px;
+    }
+}
+/* Hide hamburger by default */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 200;
+    margin-left: auto;
+}
+
+.hamburger .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+/* Animated hamburger lines when open */
+.hamburger .bar.open:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+}
+.hamburger .bar.open:nth-child(2) {
+    opacity: 0;
+}
+.hamburger .bar.open:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Hide nav-links by default on phones */
+.nav-links {
+    display: flex;
+}
+
+@media (max-width: 480px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #1a1a1a;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        width: 100%;
+        padding: 15px 0;
+        border-top: 2px solid #ff00fb;
+        z-index: 100;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .NavBar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .NavBar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 }

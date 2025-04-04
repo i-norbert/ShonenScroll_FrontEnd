@@ -1,0 +1,68 @@
+/* General Page Styles */
+.manga-page {
+    background: rgb(82,5,123);
+    background: linear-gradient(180deg, rgba(82,5,123,1) 10%, rgba(0,0,0,1) 100%);
+    color: #BC6FF1;
+    font-family: 'Raleway', sans-serif;
+    padding: 20px;
+    text-align: center;
+    min-height: 100vh ;
+}
+
+.manga-page h2 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 30px;
+}
+
+/* Manga List Styles */
+.manga-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.manga-item {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 12px;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    text-align: left;
+}
+
+.manga-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.manga-details {
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+.manga-details h3 {
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.manga-details p {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.manga-details p:first-child {
+    font-weight: bold;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .manga-list {
+        gap: 20px;
+    }
+    .manga-item {
+        width: 150px;
+    }
+}

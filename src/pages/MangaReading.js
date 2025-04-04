@@ -1,68 +1,138 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MangaPage.css";
-import {useParams} from "react-router-dom";
-import {responsiveFontSizes} from "@mui/material"; // Make sure to create and style your CSS file
+import { useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
+const API_BASE = "https://shonenscroll-backend.onrender.com";
 
 const MangaPage = () => {
+    const { id } = useParams();
+    const [manga, setManga] = useState(null);
     const [currentChapter, setCurrentChapter] = useState(0);
-    const [pages, setPages] = useState([]); // To hold fetched mangas
-    const [loading, setLoading] = useState(true); // To track loading state
-    const [error, setError] = useState(""); // To track errors
-    const {id} = useParams();
-    const fetchMangas = async () => {
-        try {
-            const response = await fetch("http://10.30.108.3:5000/manga/" + id); // Replace with your API URL
-            console.log(response)
-            if (response.status !== 200 ) {
-
-                throw new Error("Failed to fetch data");
-            }
-            const data = await response.json();
-            setPages(data);
-
-            setLoading(false);
-        } catch (err) {
-            setError(err.message);
-            setLoading(false);
-        }
-    };
-
-    const mangaPages = pages.Chapters[currentChapter].Pages;
-
-    // State for the current page
     const [currentPage, setCurrentPage] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [sidebarOpen, setSidebarOpen] = useState(true);
 
-    // Function to go to the next page
+    useEffect(() => {
+        const fetchManga = async () => {
+            try {
+                const response = await fetch(`${API_BASE}/manga/${id}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await response.json();
+
+                const sortedChapters = data.Chapters.sort((a, b) => {
+                    const aNum = parseInt(a.title);
+                    const bNum = parseInt(b.title);
+                    return aNum - bNum;
+                });
+                data.Chapters = sortedChapters;
+
+                setManga(data);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchManga();
+    }, [id]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!manga || !manga.Chapters || manga.Chapters.length === 0) return <p>No chapters found.</p>;
+
+    const mangaPages = manga.Chapters[currentChapter]?.Pages || [];
+
     const nextPage = () => {
-        if (currentPage < mangaPages.length - 1) {
-            setCurrentPage(currentPage + 1);
+        if (currentPage < mangaPages.length - 1) setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        if (currentPage > 0) setCurrentPage(currentPage - 1);
+    };
+
+    const nextChapter = () => {
+        if (currentChapter < manga.Chapters.length - 1) {
+            setCurrentChapter(currentChapter + 1);
+            setCurrentPage(0);
         }
     };
 
-    // Function to go to the previous page
-    const prevPage = () => {
-        if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
+    const prevChapter = () => {
+        if (currentChapter > 0) {
+            setCurrentChapter(currentChapter - 1);
+            setCurrentPage(0);
         }
+    };
+
+    const handleChapterClick = (index) => {
+        setCurrentChapter(index);
+        setCurrentPage(0);
     };
 
     return (
         <div className="manga-page-container">
-            <div className="manga-page-content">
-                <img
-                    src={mangaPages[currentPage].imageUrl}
-                    alt={`Manga Page ${currentPage + 1}`}
-                    className="manga-image"
-                />
+            <div className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+                <button className="toggle-sidebar" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                    <FontAwesomeIcon icon={sidebarOpen ? faChevronLeft : faChevronRight} />
+                </button>
+                {sidebarOpen && (
+                    <>
+                        <h3>Chapters</h3>
+                        <ul>
+                            {manga.Chapters.map((chapter, index) => (
+                                <li
+                                    key={chapter.id}
+                                    className={currentChapter === index ? "active" : ""}
+                                    onClick={() => handleChapterClick(index)}
+                                >
+                                    Chapter {chapter.title}
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
             </div>
-            <div className="manga-navigation">
-                <button onClick={prevPage} disabled={currentPage === 0}>
-                    Previous
-                </button>
-                <span>{`Page ${currentPage + 1} of ${mangaPages.length}`}</span>
-                <button onClick={nextPage} disabled={currentPage === mangaPages.length - 1}>
-                    Next
-                </button>
+
+            <div className="manga-content">
+                <h2>Chapter {manga.Chapters[currentChapter].title}</h2>
+                <div className="manga-page-wrapper">
+                    <button className="page-button left" onClick={prevPage} disabled={currentPage === 0}>
+                        ❮
+                    </button>
+                    <div className="manga-page-content">
+                        {mangaPages.length > 0 ? (
+                            <img
+                                src={`${API_BASE}${mangaPages[currentPage].imageUrl}`}
+                                alt={`Manga Page ${currentPage + 1}`}
+                                className="manga-image enlarged"
+                            />
+                        ) : (
+                            <p>No pages available</p>
+                        )}
+                    </div>
+                    <button
+                        className="page-button right"
+                        onClick={nextPage}
+                        disabled={currentPage >= mangaPages.length - 1}
+                    >
+                        ❯
+                    </button>
+                </div>
+
+                <div className="chapter-navigation">
+                    <button onClick={prevChapter} disabled={currentChapter === 0}>
+                        Previous Chapter
+                    </button>
+                    <button onClick={nextChapter} disabled={currentChapter >= manga.Chapters.length - 1}>
+                        Next Chapter
+                    </button>
+                </div>
             </div>
         </div>
     );

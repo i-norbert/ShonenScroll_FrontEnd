@@ -5,7 +5,6 @@
     background: rgb(82,5,123);
     background: linear-gradient(180deg, rgba(82,5,123,1) 10%, rgba(0,0,0,1) 100%);
     color: #BC6FF1;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,18 +12,18 @@
     text-align: center;
     font-family: 'Carter One', sans-serif;
     padding: 0 20px;
+    min-height: 100vh;
 }
 
 .home-title {
     font-size: 4rem;
     color: #892CDC;
-    margin-bottom: 20px;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .home-description {
     font-size: 1.5rem;
-    color: #52057B;
+    color: #eae3e3;
     margin-bottom: 40px;
     font-weight: normal;
 }
@@ -45,7 +44,7 @@
 }
 .manga-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 2fr));
     gap: 20px;
     margin-top: 40px;
     width: 100%;
@@ -53,10 +52,12 @@
 }
 
 .manga-card {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center;
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 12px;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    text-align: left;
     cursor: pointer;
 }
 
@@ -70,5 +71,16 @@
     font-size: 1.2rem;
     color: #892CDC;
     margin-top: 10px;
+    text-align: center;
+}
+.random-manga-title {
+    font-size: 2.5rem;
+    color: #892CDC;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    font-family: 'Carter One', sans-serif;
+}
+.manga-details {
     text-align: center;
 }
