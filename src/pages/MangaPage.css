@@ -353,22 +353,31 @@
     z-index: 10000;
 }
 
-.fullscreen-toggle {
+.manga-page-content {
+    position: relative;
+}
+
+.fullscreen-toggle-wrapper {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
+    bottom: 10px;
+    right: 10px;
+}
+
+.fullscreen-toggle {
+    background: rgba(0, 0, 0, 0.6);
     color: white;
+    border: none;
     border-radius: 50%;
-    padding: 12px;
-    font-size: 1.2rem;
     cursor: pointer;
-    transition: background 0.3s ease;
-    z-index: 10;
+    font-size: 1.2rem;
+    transition: background 0.2s ease;
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
 }
 
 .fullscreen-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.8);
 }
+
 

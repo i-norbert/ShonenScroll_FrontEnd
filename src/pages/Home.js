@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
-const Home = () => {
-    const [mangas, setMangas] = useState([]); // To hold fetched mangas
-    const [loading, setLoading] = useState(true); // To track loading state
-    const [error, setError] = useState(""); // To track errors
+        const API_BASE = "http://localhost:5000"; // Updated API base URL
 
-    // Function to shuffle an array (Fisher-Yates shuffle)
+const Home = () => {
+    const [mangas, setMangas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
     const shuffleArray = (array) => {
         let shuffledArray = [...array];
         for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -18,17 +18,16 @@ const Home = () => {
         return shuffledArray;
     };
 
-    // Fetch random mangas from an API or mock database
     useEffect(() => {
         const fetchMangas = async () => {
             try {
-                const response = await fetch("https://shonenscroll-backend.onrender.com/manga/"); // Replace with your API URL
+                const response = await fetch(`${API_BASE}/manga/`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch data");
                 }
                 const data = await response.json();
-                const shuffledMangas = shuffleArray(data); // Shuffle the mangas array
-                setMangas(shuffledMangas.slice(0, 12)); // Slice the first 10 mangas after shuffle
+                const shuffledMangas = shuffleArray(data);
+                setMangas(shuffledMangas.slice(0, 12));
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
@@ -57,7 +56,7 @@ const Home = () => {
                     <Link key={manga.id} to={`/reading/${manga.id}`}>
                         <div className="manga-card">
                             <img
-                                src={`https://shonenscroll-backend.onrender.com${manga.coverImage}`}
+                                src={`${API_BASE}${manga.coverImage}`}
                                 alt={manga.title}
                                 className="manga-cover"
                             />
@@ -69,7 +68,6 @@ const Home = () => {
                     </Link>
                 ))}
             </div>
-
         </div>
     );
 };
