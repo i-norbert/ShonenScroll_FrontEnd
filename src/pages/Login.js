@@ -3,9 +3,9 @@ import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import {UserContext} from "../UserContext";
+import { UserContext } from "../UserContext";
 
-const API_BASE = "https://shonenscroll-backend.onrender.com";
+const API_BASE = "http://localhost:5000"; // or your deployed backend URL
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function Login() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const { login } = useContext(UserContext); // ← use context
+    const { login } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -30,7 +30,15 @@ export default function Login() {
             const data = await response.json();
             if (!response.ok) throw new Error(data.message || "Login failed");
 
-            login(data.userId); // ← set user in context
+            // Destructure and normalize user object
+            const userData = {
+                id: data.user.userid,
+                username: data.user.username,
+                email: data.user.email,
+                profilePicture: data.user.profilePicture || "",
+            };
+
+            login(userData);
 
             setSuccess("Login successful!");
             setTimeout(() => navigate("/", { replace: true }), 1000);
@@ -44,6 +52,7 @@ export default function Login() {
             <h2>Login</h2>
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
+
             <TextField
                 className="textfield"
                 label="Email"
@@ -66,7 +75,12 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <br />
-            <Button variant="contained" color="success" sx={{ ml: 30 }} onClick={handleLogin}>
+            <Button
+                variant="contained"
+                color="success"
+                sx={{ ml: 30 }}
+                onClick={handleLogin}
+            >
                 Login
             </Button>
         </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./MangaPage.css";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight, faCompress, faExpand, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faChevronRight, faExpand, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../UserContext";
 
 const API_BASE = "https://shonenscroll-backend.onrender.com";

@@ -1,10 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
 import { useContext } from "react";
 import "./navstyle.css";
-import { UserContext } from "../UserContext"; // <- import the context
+import { UserContext } from "../UserContext";
 
 const Layout = () => {
-    const { user, logout } = useContext(UserContext); // <- use context
+    const { user, logout } = useContext(UserContext);
 
     return (
         <>
@@ -33,9 +33,16 @@ const Layout = () => {
                             </li>
                         </>
                     ) : (
-                        <li className="reg">
-                            <button onClick={logout} className="logout-btn">Logout</button>
-                        </li>
+                        <>
+                            <li className="reg">
+                                <button onClick={logout} className="logout-btn">Logout</button>
+                            </li>
+                            <li>
+                                <Link to="/myprofile">
+                                    {user.username ? `${user.username}'s Profile` : "My Profile"}
+                                </Link>
+                            </li>
+                        </>
                     )}
                 </ul>
             </nav>

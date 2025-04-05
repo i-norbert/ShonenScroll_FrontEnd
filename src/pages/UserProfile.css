@@ -1,0 +1,92 @@
+body {
+    background-color: #0f0f1a;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.user-profile {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1a1a2e, #111);
+    box-shadow: 0 0 25px #6a0dad88;
+    color: #f2f2f2;
+    text-align: center;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #9d4edd;
+    box-shadow: 0 0 15px #9d4edd;
+    margin-bottom: 1rem;
+}
+
+.neon-heading {
+    font-size: 1.8rem;
+    color: #c77dff;
+    text-shadow: 0 0 10px #c77dff, 0 0 20px #9d4edd;
+    margin-bottom: 1.5rem;
+}
+
+.neon-text {
+    color: #e0aaff;
+    text-shadow: 0 0 5px #9d4edd;
+}
+
+.neon-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #e0aaff;
+    text-shadow: 0 0 5px #c77dff;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background-color: #22203a;
+    color: #fff;
+    box-shadow: 0 0 10px #5a189a inset;
+}
+
+.neon-button {
+    background: #7b2cbf;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    margin: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-shadow: 0 0 5px #fff;
+    box-shadow: 0 0 10px #7b2cbf, 0 0 20px #9d4edd;
+    transition: all 0.3s ease;
+}
+
+.neon-button:hover {
+    background: #9d4edd;
+    box-shadow: 0 0 15px #c77dff, 0 0 25px #c77dff;
+}
+
+.neon-button.danger {
+    background: #ff4d6d;
+    box-shadow: 0 0 10px #ff4d6d;
+}
+
+.neon-button.danger:hover {
+    background: #ff1e56;
+    box-shadow: 0 0 20px #ff1e56;
+}
+
+.status-text {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #ccc;
+    text-shadow: 0 0 5px #fff;
+}

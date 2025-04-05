@@ -8,6 +8,7 @@ import Search from "./pages/Search.js";
 import Register from "./pages/Register.js";
 import MangaReading from "./pages/MangaReading.js";
 import Login from "./pages/Login";
+import UserProfile from "./pages/UserProfile";
 
 export default function MenuBar() {
     return (
@@ -21,6 +22,7 @@ export default function MenuBar() {
                     <Route path="register" element={<Register />} />
                     <Route path="search" element={<Search />} />
                     <Route path="login" element={<Login />} />
+                    <Route path="myprofile" element={<UserProfile />} />
                     <Route path="reading/:id" element={<MangaReading />}/>
                 </Route>
             </Routes>

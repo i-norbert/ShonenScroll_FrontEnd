@@ -3,7 +3,7 @@ import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const API_BASE = "https://shonenscroll-backend.onrender.com";
+const API_BASE = "http://localhost:5000";
 
 export default function Register() {
     const [username, setUsername] = useState("");
@@ -15,8 +15,8 @@ export default function Register() {
     const handleRegister = async () => {
         setError("");
         setSuccess("");
+
         try {
-            // Sending POST request to register API
             const response = await fetch(`${API_BASE}/auth/register`, {
                 method: "POST",
                 headers: {
@@ -27,15 +27,15 @@ export default function Register() {
 
             const data = await response.json();
 
-            // If the response is not successful, show an error
             if (!response.ok) {
                 throw new Error(data.message || "Registration failed");
             }
 
-            // Show success message if registration is successful
             setSuccess("User registered successfully!");
+            setUsername("");
+            setEmail("");
+            setPassword("");
         } catch (err) {
-            // Catch and display the error
             setError(err.message);
         }
     };
@@ -44,11 +44,9 @@ export default function Register() {
         <div className="Container">
             <h2>Register</h2>
             <br />
-            {/* Display error or success messages */}
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
 
-            {/* Username input field */}
             <TextField
                 className="textfield"
                 label="Username"
@@ -59,8 +57,6 @@ export default function Register() {
                 onChange={(e) => setUsername(e.target.value)}
             />
             <br />
-
-            {/* Email input field */}
             <TextField
                 className="textfield"
                 label="Email"
@@ -71,8 +67,6 @@ export default function Register() {
                 onChange={(e) => setEmail(e.target.value)}
             />
             <br />
-
-            {/* Password input field */}
             <TextField
                 className="textfield"
                 label="Password"
@@ -85,9 +79,12 @@ export default function Register() {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <br />
-
-            {/* Register button */}
-            <Button variant="contained" color="success" sx={{ ml: 30 }} onClick={handleRegister}>
+            <Button
+                variant="contained"
+                color="success"
+                sx={{ mt: 2 }}
+                onClick={handleRegister}
+            >
                 Register
             </Button>
         </div>
