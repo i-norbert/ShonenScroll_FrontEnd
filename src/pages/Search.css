@@ -5,6 +5,7 @@ body {
     color: #BC6FF1;
     min-height: 100vh ;
 }
+
 .search-container {
     color: #BC6FF1;
     font-family: 'Carter One', sans-serif;
@@ -12,7 +13,6 @@ body {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
-
 }
 
 .textfield {
@@ -24,6 +24,7 @@ body {
     flex-wrap: wrap;
     gap: 15px;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .manga-item {
@@ -53,4 +54,12 @@ body {
 button:disabled {
     background-color: #444;
     cursor: not-allowed;
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
