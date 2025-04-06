@@ -1,11 +1,18 @@
+// MangaReading.js
 import React, { useState, useEffect, useContext } from "react";
 import "./MangaPage.css";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight, faExpand, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {
+    faChevronLeft,
+    faChevronRight,
+    faExpand,
+    faXmark,
+    faHeart as solidHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../UserContext";
 
-const API_BASE = "https://shonenscroll-backend.onrender.com";
+import API_BASE from '../ApiBase';
 
 const MangaPage = () => {
     const { id } = useParams();
@@ -17,81 +24,66 @@ const MangaPage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [newComment, setNewComment] = useState("");
     const [commentSubmitting, setCommentSubmitting] = useState(false);
-    const [isFullscreen, setIsFullscreen] = useState(false); // ← fullscreen state
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        const fetchManga = async () => {
-            try {
-                const response = await fetch(`${API_BASE}/manga/${id}`);
-                if (!response.ok) throw new Error("Failed to fetch data");
-                const data = await response.json();
-                data.Chapters.sort((a, b) => parseInt(a.title) - parseInt(b.title));
-                setManga(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchManga();
+        fetchMangaData();
     }, [id]);
 
-    const mangaPages = manga?.Chapters[currentChapter]?.Pages || [];
+    const fetchMangaData = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/manga/${id}`);
+            const data = await res.json();
+            data.Chapters.sort((a, b) => parseInt(a.title) - parseInt(b.title));
+            setManga(data);
+        } catch (err) {
+            setError("Failed to load manga");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const currentComments = (manga?.Chapters[currentChapter]?.Comments || []).sort(
         (a, b) => b.likes - a.likes
     );
+    const mangaPages = manga?.Chapters[currentChapter]?.Pages || [];
 
-    const nextPage = () => {
-        if (currentPage < mangaPages.length - 1) setCurrentPage(currentPage + 1);
+    const hasUserLiked = (comment) => {
+        return comment.Users?.some((u) => u.userid === user?.userid);
     };
 
-    const prevPage = () => {
-        if (currentPage > 0) setCurrentPage(currentPage - 1);
-    };
+    const toggleLike = async (commentId, liked) => {
+        if (!user) return;
+        const method = liked ? "DELETE" : "POST";
+        const endpoint = liked ? "unlike" : "like";
+        const res = await fetch(`${API_BASE}/manga/comment/${commentId}/${endpoint}`, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: user.userid }),
+        });
 
-    const nextChapter = () => {
-        if (currentChapter < manga.Chapters.length - 1) {
-            setCurrentChapter(currentChapter + 1);
-            setCurrentPage(0);
-        }
-    };
-
-    const prevChapter = () => {
-        if (currentChapter > 0) {
-            setCurrentChapter(currentChapter - 1);
-            setCurrentPage(0);
-        }
-    };
-
-    const handleChapterClick = (index) => {
-        setCurrentChapter(index);
-        setCurrentPage(0);
+        if (res.ok) fetchMangaData();
     };
 
     const handleCommentSubmit = async () => {
-        if (!newComment.trim() || !user?.id) return;
+        if (!newComment.trim() || !user?.userid) return;
 
         setCommentSubmitting(true);
         const chapterId = manga.Chapters[currentChapter].id;
-
         try {
             await fetch(`${API_BASE}/manga/chapter/${chapterId}/comment`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    cuserId: user.id,
+                    cuserId: user.userid,
                     content: newComment,
                 }),
             });
 
-            const response = await fetch(`${API_BASE}/manga/${id}`);
-            const updatedData = await response.json();
-            updatedData.Chapters.sort((a, b) => parseInt(a.title) - parseInt(b.title));
-            setManga(updatedData);
             setNewComment("");
+            fetchMangaData();
         } catch {
             alert("Failed to post comment");
         } finally {
@@ -101,7 +93,6 @@ const MangaPage = () => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
-    if (!manga || !manga.Chapters.length) return <p>No chapters found.</p>;
 
     return (
         <div className="manga-page-container">
@@ -117,7 +108,10 @@ const MangaPage = () => {
                                 <li
                                     key={chapter.id}
                                     className={currentChapter === index ? "active" : ""}
-                                    onClick={() => handleChapterClick(index)}
+                                    onClick={() => {
+                                        setCurrentChapter(index);
+                                        setCurrentPage(0);
+                                    }}
                                 >
                                     Chapter {chapter.title}
                                 </li>
@@ -131,7 +125,10 @@ const MangaPage = () => {
                 <h2>Chapter {manga.Chapters[currentChapter].title}</h2>
 
                 <div className="manga-page-wrapper">
-                    <button className="page-button left" onClick={prevPage} disabled={currentPage === 0}>
+                    <button
+                        className="page-button left"
+                        onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
+                    >
                         ❮
                     </button>
                     <div className="manga-page-content">
@@ -139,19 +136,14 @@ const MangaPage = () => {
                             <>
                                 <img
                                     src={`${API_BASE}${mangaPages[currentPage].imageUrl}`}
-                                    alt={`Manga Page ${currentPage + 1}`}
+                                    alt={`Page ${currentPage + 1}`}
                                     className="manga-image enlarged"
                                 />
                                 <div className="fullscreen-toggle-wrapper">
-                                    <button
-                                        className="fullscreen-toggle"
-                                        onClick={() => setIsFullscreen(true)}
-                                        title="Enter Fullscreen"
-                                    >
+                                    <button onClick={() => setIsFullscreen(true)} title="Enter Fullscreen">
                                         <FontAwesomeIcon icon={faExpand} />
                                     </button>
                                 </div>
-
                             </>
                         ) : (
                             <p>No pages available</p>
@@ -159,18 +151,27 @@ const MangaPage = () => {
                     </div>
                     <button
                         className="page-button right"
-                        onClick={nextPage}
-                        disabled={currentPage >= mangaPages.length - 1}
+                        onClick={() =>
+                            setCurrentPage((p) => Math.min(p + 1, mangaPages.length - 1))
+                        }
                     >
                         ❯
                     </button>
                 </div>
 
                 <div className="chapter-navigation">
-                    <button onClick={prevChapter} disabled={currentChapter === 0}>
+                    <button
+                        onClick={() => setCurrentChapter((c) => Math.max(0, c - 1))}
+                        disabled={currentChapter === 0}
+                    >
                         Previous Chapter
                     </button>
-                    <button onClick={nextChapter} disabled={currentChapter >= manga.Chapters.length - 1}>
+                    <button
+                        onClick={() =>
+                            setCurrentChapter((c) => Math.min(c + 1, manga.Chapters.length - 1))
+                        }
+                        disabled={currentChapter === manga.Chapters.length - 1}
+                    >
                         Next Chapter
                     </button>
                 </div>
@@ -191,16 +192,33 @@ const MangaPage = () => {
                     ) : (
                         <p>Please log in to comment.</p>
                     )}
+
                     {currentComments.length === 0 ? (
                         <p>No comments yet. Be the first!</p>
                     ) : (
                         <ul className="comment-list">
-                            {currentComments.map((comment) => (
-                                <li key={comment.id} className="comment">
-                                    <p>{comment.content}</p>
-                                    <small>Likes: {comment.likes || 0}</small>
-                                </li>
-                            ))}
+                            {currentComments.map((comment) => {
+                                const liked = hasUserLiked(comment);
+                                return (
+                                    <li key={comment.id} className="comment">
+                                        <p>{comment.content}</p>
+                                        <small>By: {comment.User?.username}</small>
+                                        <p>{comment.createdAt}</p>
+                                        <div className="comment-actions">
+                                            <button
+                                                onClick={() => toggleLike(comment.id, liked)}
+                                                className="like-button"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={solidHeart}
+                                                    className={liked ? "liked" : "not-liked"}
+                                                />
+                                                {comment.likes}
+                                            </button>
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                 </div>
@@ -211,7 +229,10 @@ const MangaPage = () => {
                     <button className="close-fullscreen" onClick={() => setIsFullscreen(false)}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
-                    <button className="page-button left" onClick={prevPage} disabled={currentPage === 0}>
+                    <button
+                        className="page-button left"
+                        onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
+                    >
                         ❮
                     </button>
                     <img
@@ -221,8 +242,9 @@ const MangaPage = () => {
                     />
                     <button
                         className="page-button right"
-                        onClick={nextPage}
-                        disabled={currentPage >= mangaPages.length - 1}
+                        onClick={() =>
+                            setCurrentPage((p) => Math.min(p + 1, mangaPages.length - 1))
+                        }
                     >
                         ❯
                     </button>

@@ -3,7 +3,7 @@ import "./Search.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const API_BASE = "https://shonenscroll-backend.onrender.com";
+import API_BASE from '../ApiBase';
 
 export default function Search() {
     const [searchQuery, setSearchQuery] = useState("");

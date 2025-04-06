@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
 import "./UserProfile.css";
 
-const API_BASE = "http://localhost:5000";
+import API_BASE from '../ApiBase';
+
 
 const UserProfile = () => {
     const { user, loading, login } = useContext(UserContext);

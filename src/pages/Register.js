@@ -3,7 +3,7 @@ import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const API_BASE = "http://localhost:5000";
+import API_BASE from '../ApiBase';
 
 export default function Register() {
     const [username, setUsername] = useState("");

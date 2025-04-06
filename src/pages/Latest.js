@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // ✅ Add Link from react-router-dom
 import "./Latest.css";
 
-const API_BASE = "https://shonenscroll-backend.onrender.com";
+import API_BASE from '../ApiBase';
 
 export default function Latest() {
     const [mangas, setMangas] = useState([]);

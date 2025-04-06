@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
-const API_BASE = "http://localhost:5000"; // or your deployed backend URL
+import API_BASE from '../ApiBase';
 
 export default function Login() {
     const [email, setEmail] = useState("");

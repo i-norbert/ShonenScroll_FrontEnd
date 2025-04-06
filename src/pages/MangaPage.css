@@ -379,5 +379,25 @@
 .fullscreen-toggle:hover {
     background: rgba(0, 0, 0, 0.8);
 }
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.like-button .liked {
+    color: #ff4d6d;
+}
+
+.like-button .not-liked {
+    color: #aaa;
+}
+
+
 
 

@@ -9,7 +9,6 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Load full user data if session exists
     useEffect(() => {
         const storedUserId = sessionStorage.getItem("userId");
         if (storedUserId) {
@@ -41,7 +40,7 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
-        {children}
+            {children}
         </UserContext.Provider>
     );
 };
