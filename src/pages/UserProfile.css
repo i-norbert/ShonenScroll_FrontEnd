@@ -90,3 +90,33 @@ input[type="text"] {
     color: #ccc;
     text-shadow: 0 0 5px #fff;
 }
+.avatar-picker {
+    margin-top: 1rem;
+}
+
+.avatar-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.avatar-option {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+.avatar-option:hover {
+    border-color: #00ffff99;
+    transform: scale(1.1);
+}
+
+.avatar-option.selected {
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px #00ffcc88;
+}
+
