@@ -11,13 +11,20 @@ const UserProfile = () => {
     const [profilePicture, setProfilePicture] = useState("");
     const [editing, setEditing] = useState(false);
     const [status, setStatus] = useState("");
+    const [defaultAvatars, setDefaultAvatars] = useState([]);
 
     useEffect(() => {
-        if (user) {
-            setUsername(user.username || "");
-            setProfilePicture(user.profilePicture || "");
-        }
-    }, [user]);
+    if (user) {
+        setUsername(user.username || "");
+        setProfilePicture(user.profilePicture || "");
+    }
+
+    // Fetch default avatars
+    fetch(`${API_BASE}/users/default-avatars`)
+        .then(res => res.json())
+        .then(data => setDefaultAvatars(data))
+        .catch(err => console.error("Failed to fetch default avatars:", err));
+}, [user]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -75,12 +82,20 @@ const UserProfile = () => {
                             />
                         </label>
                         <label>
-                            <span className="neon-label">Profile Picture URL</span>
-                            <input
-                                type="text"
-                                value={profilePicture}
-                                onChange={(e) => setProfilePicture(e.target.value)}
-                            />
+                           <div className="avatar-picker">
+    <span className="neon-label">Choose a Default Avatar</span>
+    <div className="avatar-grid">
+        {defaultAvatars.map((avatar, i) => (
+            <img
+                key={i}
+                src={avatar}
+                alt={`Avatar ${i + 1}`}
+                className={`avatar-option ${profilePicture === avatar ? "selected" : ""}`}
+                onClick={() => setProfilePicture(avatar)}
+            />
+        ))}
+    </div>
+</div>
                         </label>
                         <div className="button-group">
                             <button type="submit" className="neon-button">Save</button>
