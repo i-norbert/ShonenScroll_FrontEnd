@@ -1,4 +1,3 @@
-// MangaReading.js
 import React, { useState, useEffect, useContext } from "react";
 import "./MangaPage.css";
 import { useParams } from "react-router-dom";
@@ -11,8 +10,7 @@ import {
     faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../UserContext";
-
-import API_BASE from '../ApiBase';
+import API_BASE from "../ApiBase";
 
 const MangaPage = () => {
     const { id } = useParams();
@@ -30,6 +28,7 @@ const MangaPage = () => {
 
     useEffect(() => {
         fetchMangaData();
+        incrementViews(); // trigger views counter
     }, [id]);
 
     const fetchMangaData = async () => {
@@ -42,6 +41,18 @@ const MangaPage = () => {
             setError("Failed to load manga");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const incrementViews = async () => {
+        try {
+            await fetch(`${API_BASE}/manga/${id}/view`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: user?.userid }), // optional
+            });
+        } catch (err) {
+            console.error("Failed to increment views:", err);
         }
     };
 
@@ -123,6 +134,7 @@ const MangaPage = () => {
 
             <div className="manga-content">
                 <h2>Chapter {manga.Chapters[currentChapter].title}</h2>
+                <p className="manga-views">👁️ {manga.views} views</p>
 
                 <div className="manga-page-wrapper">
                     <button
