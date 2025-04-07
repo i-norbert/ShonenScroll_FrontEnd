@@ -20,7 +20,7 @@ const UserProfile = () => {
     }
 
     // Fetch default avatars
-    fetch(`${API_BASE}/users/default-avatars`)
+    fetch(`${API_BASE}/auth/default-avatars`)
         .then(res => res.json())
         .then(data => setDefaultAvatars(data))
         .catch(err => console.error("Failed to fetch default avatars:", err));
@@ -43,7 +43,7 @@ const UserProfile = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, profilePicture }),
             });
-
+            console.log(response);
             if (!response.ok) throw new Error("Failed to update profile");
 
             const { user: updatedUserData } = await response.json();
@@ -67,7 +67,7 @@ const UserProfile = () => {
             <h2 className="neon-heading">Your Profile</h2>
             <div className="profile-info">
                 <img
-                    src={profilePicture || "https://via.placeholder.com/100"}
+                    src={profilePicture}
                     alt="Profile"
                     className="profile-picture"
                 />

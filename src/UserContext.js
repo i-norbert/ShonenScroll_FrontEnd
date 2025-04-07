@@ -10,23 +10,27 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedUserId = sessionStorage.getItem("userId");
-        if (storedUserId) {
-            fetch(`${API_BASE}/users/${storedUserId}`)
-                .then(res => res.json())
-                .then(data => {
+        const fetchUser = async () => {
+            const storedUserId = sessionStorage.getItem("userId");
+            if (storedUserId) {
+                try {
+                    const res = await fetch(`${API_BASE}/users/${storedUserId}`);
+                    const data = await res.json();
                     setUser(data);
-                    setLoading(false);
-                })
-                .catch(err => {
+                } catch (err) {
                     console.error("Failed to load user:", err);
                     setUser(null);
+                } finally {
                     setLoading(false);
-                });
-        } else {
-            setLoading(false);
-        }
+                }
+            } else {
+                setLoading(false);
+            }
+        };
+
+        fetchUser();
     }, []);
+
 
     const login = (userData) => {
         sessionStorage.setItem("userId", userData.id);

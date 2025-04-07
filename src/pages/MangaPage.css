@@ -16,7 +16,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
-    position: sticky;
+    position: relative;
     top: 0;
     border-right: 2px solid #8a2be2;
     scroll-behavior: smooth;
@@ -231,50 +231,82 @@
     }
 }
 /* Comments Section */
-.comments-section {
-    background-color: #1a1a1a;
-    color: #e0e0ff;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    margin-top: 2rem;
-    box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
-}
-
-.comments-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #c084fc;
-}
-
-.comment-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-bottom: 2rem;
-}
-
 .comment {
-    background-color: #2a2a2a;
-    border-left: 4px solid #a855f7;
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #1a1a2e;
+    color: #ffffff;
     padding: 1rem;
-    border-radius: 0.75rem;
-    transition: background-color 0.3s ease;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+    margin-bottom: 1rem;
 }
 
-.comment:hover {
-    background-color: #333;
+.comment-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    border: 2px solid #a855f7;
+    object-fit: cover;
 }
 
-.comment p {
-    margin: 0 0 0.5rem;
+.comment-body {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.comment-username {
+    color: #a78bfa;
+    font-weight: 600;
+}
+
+.comment-date {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.comment-content {
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.like-button {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #ec4899;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    background: none;
+    border: none;
     font-size: 1rem;
 }
 
-.comment small {
-    font-size: 0.85rem;
-    color: #b8a3d7;
+.like-button:hover {
+    color: #f472b6;
 }
+
+.liked {
+    color: #ec4899;
+}
+
+.not-liked {
+    color: #6b7280;
+}
+
 
 .comment-form {
     display: flex;

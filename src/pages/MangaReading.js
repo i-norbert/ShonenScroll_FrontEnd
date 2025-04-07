@@ -213,20 +213,31 @@ const MangaPage = () => {
                                 const liked = hasUserLiked(comment);
                                 return (
                                     <li key={comment.id} className="comment">
-                                        <p>{comment.content}</p>
-                                        <small>By: {comment.User?.username}</small>
-                                        <p>{comment.createdAt}</p>
-                                        <div className="comment-actions">
-                                            <button
-                                                onClick={() => toggleLike(comment.id, liked)}
-                                                className="like-button"
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={solidHeart}
-                                                    className={liked ? "liked" : "not-liked"}
-                                                />
-                                                {comment.likes}
-                                            </button>
+                                        <img
+                                            src={comment.User?.profilePicture}
+                                            alt="User"
+                                            className="comment-avatar"
+                                        />
+                                        <div className="comment-body">
+                                            <div className="comment-header">
+                                                <small className="comment-username">{comment.User?.username}</small>
+                                                <small className="comment-date">
+                                                    {new Date(comment.createdAt).toLocaleString()}
+                                                </small>
+                                            </div>
+                                            <p className="comment-content">{comment.content}</p>
+                                            <div className="comment-actions">
+                                                <button
+                                                    onClick={() => toggleLike(comment.id, liked)}
+                                                    className="like-button"
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={solidHeart}
+                                                        className={liked ? "liked" : "not-liked"}
+                                                    />
+                                                    <span>{comment.likes}</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </li>
                                 );
