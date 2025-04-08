@@ -98,7 +98,7 @@
 
 /* Carousel */
 .carousel-banner {
-    width: 100vw;
+    width: 99vw;
     overflow: hidden;
     background: #111;
     border-bottom: 2px solid #6e00ff;

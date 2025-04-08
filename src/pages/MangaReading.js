@@ -8,6 +8,7 @@ import {
     faExpand,
     faXmark,
     faHeart as solidHeart,
+    faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../UserContext";
 import API_BASE from "../ApiBase";
@@ -26,10 +27,24 @@ const MangaPage = () => {
 
     const { user } = useContext(UserContext);
 
+    const [showSendPopup, setShowSendPopup] = useState(false);
+    const [friends, setFriends] = useState([]);
+    const [selectedFriends, setSelectedFriends] = useState([]);
+
     useEffect(() => {
         fetchMangaData();
-        incrementViews(); // trigger views counter
+        incrementViews();
     }, [id]);
+
+    useEffect(() => {
+        if (user?.userid) fetchFriends();
+    }, [user]);
+
+    const fetchFriends = async () => {
+        const res = await fetch(`${API_BASE}/friends/list/${user.userid}`);
+        const data = await res.json();
+        setFriends(data);
+    };
 
     const fetchMangaData = async () => {
         try {
@@ -49,17 +64,34 @@ const MangaPage = () => {
             await fetch(`${API_BASE}/manga/${id}/view`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: user?.userid }), // optional
+                body: JSON.stringify({ userId: user?.userid }),
             });
         } catch (err) {
             console.error("Failed to increment views:", err);
         }
     };
 
-    const currentComments = (manga?.Chapters[currentChapter]?.Comments || []).sort(
-        (a, b) => b.likes - a.likes
-    );
-    const mangaPages = manga?.Chapters[currentChapter]?.Pages || [];
+    const handleCommentSubmit = async () => {
+        if (!newComment.trim() || !user?.userid) return;
+        setCommentSubmitting(true);
+        const chapterId = manga.Chapters[currentChapter].id;
+        try {
+            await fetch(`${API_BASE}/manga/chapter/${chapterId}/comment`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    cuserId: user.userid,
+                    content: newComment,
+                }),
+            });
+            setNewComment("");
+            fetchMangaData();
+        } catch {
+            alert("Failed to post comment");
+        } finally {
+            setCommentSubmitting(false);
+        }
+    };
 
     const hasUserLiked = (comment) => {
         return comment.Users?.some((u) => u.userid === user?.userid);
@@ -78,28 +110,44 @@ const MangaPage = () => {
         if (res.ok) fetchMangaData();
     };
 
-    const handleCommentSubmit = async () => {
-        if (!newComment.trim() || !user?.userid) return;
+    const currentComments = (manga?.Chapters[currentChapter]?.Comments || []).sort(
+        (a, b) => b.likes - a.likes
+    );
+    const mangaPages = manga?.Chapters[currentChapter]?.Pages || [];
 
-        setCommentSubmitting(true);
-        const chapterId = manga.Chapters[currentChapter].id;
-        try {
-            await fetch(`${API_BASE}/manga/chapter/${chapterId}/comment`, {
+    const sendChapterToFriends = async () => {
+        const chapter = manga.Chapters[currentChapter];
+        const chapterInfo = {
+            type: "chapter",
+            title: `Chapter ${chapter.title}`,
+            mangaId: manga.id,
+            chapterTitle: chapter.title,
+            thumbnail: `${mangaPages[currentPage].imageUrl}`,
+        };
+
+        for (const friend of selectedFriends) {
+            await fetch(`${API_BASE}/messages/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    cuserId: user.userid,
-                    content: newComment,
+                    senderId: user.userid,
+                    receiverId: friend,
+                    content: JSON.stringify(chapterInfo),
+                    type: "chapter",
                 }),
             });
-
-            setNewComment("");
-            fetchMangaData();
-        } catch {
-            alert("Failed to post comment");
-        } finally {
-            setCommentSubmitting(false);
         }
+
+        setSelectedFriends([]);
+        setShowSendPopup(false);
+    };
+
+    const toggleFriend = (fid) => {
+        setSelectedFriends((prev) =>
+            prev.includes(fid)
+                ? prev.filter((id) => id !== fid)
+                : [...prev, fid]
+        );
     };
 
     if (loading) return <p>Loading...</p>;
@@ -107,6 +155,7 @@ const MangaPage = () => {
 
     return (
         <div className="manga-page-container">
+            {/* Sidebar */}
             <div className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
                 <button className="toggle-sidebar" onClick={() => setSidebarOpen(!sidebarOpen)}>
                     <FontAwesomeIcon icon={sidebarOpen ? faChevronLeft : faChevronRight} />
@@ -132,6 +181,7 @@ const MangaPage = () => {
                 )}
             </div>
 
+            {/* Main content */}
             <div className="manga-content">
                 <h2>Chapter {manga.Chapters[currentChapter].title}</h2>
                 <p className="manga-views">👁️ {manga.views} views</p>
@@ -171,6 +221,27 @@ const MangaPage = () => {
                     </button>
                 </div>
 
+                {/* Send to friend button */}
+                {user && (
+                    <button
+                        className="send-chapter-btn"
+                        onClick={() => setShowSendPopup(true)}
+                        style={{
+                            background: "#7b2cbf",
+                            color: "white",
+                            padding: "10px 16px",
+                            borderRadius: "12px",
+                            margin: "10px 0",
+                            border: "none",
+                            boxShadow: "0 0 8px #9d4edd",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faPaperPlane} /> Send to Friend
+                    </button>
+                )}
+
+                {/* Chapter nav */}
                 <div className="chapter-navigation">
                     <button
                         onClick={() => setCurrentChapter((c) => Math.max(0, c - 1))}
@@ -188,6 +259,7 @@ const MangaPage = () => {
                     </button>
                 </div>
 
+                {/* Comments */}
                 <div className="comments-section">
                     <h3>Comments</h3>
                     {user ? (
@@ -247,6 +319,7 @@ const MangaPage = () => {
                 </div>
             </div>
 
+            {/* Fullscreen viewer */}
             {isFullscreen && (
                 <div className="fullscreen-overlay">
                     <button className="close-fullscreen" onClick={() => setIsFullscreen(false)}>
@@ -265,12 +338,35 @@ const MangaPage = () => {
                     />
                     <button
                         className="page-button right"
-                        onClick={() =>
-                            setCurrentPage((p) => Math.min(p + 1, mangaPages.length - 1))
-                        }
+                        onClick={() => setCurrentPage((p) => Math.min(p + 1, mangaPages.length - 1))}
                     >
                         ❯
                     </button>
+                </div>
+            )}
+
+            {/* Send popup modal */}
+            {showSendPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-card">
+                        <h3>Send Chapter To:</h3>
+                        <ul className="friend-list">
+                            {friends.map((f) => (
+                                <li
+                                    key={f.userid}
+                                    className={`friend-option ${selectedFriends.includes(f.userid) ? "selected" : ""}`}
+                                    onClick={() => toggleFriend(f.userid)}
+                                >
+                                    <img src={f.profilePicture} alt="Friend" />
+                                    {f.username}
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="popup-actions">
+                            <button onClick={sendChapterToFriends}>Send</button>
+                            <button onClick={() => setShowSendPopup(false)}>Cancel</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+// login.js
+import React, { useState } from "react";
 import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../UserContext";
 
 import API_BASE from '../ApiBase';
 
@@ -13,7 +13,6 @@ export default function Login() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const { login } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -30,18 +29,16 @@ export default function Login() {
             const data = await response.json();
             if (!response.ok) throw new Error(data.message || "Login failed");
 
-            // Destructure and normalize user object
-            const userData = {
-                id: data.user.userid,
-                username: data.user.username,
-                email: data.user.email,
-                profilePicture: data.user.profilePicture || "",
-            };
-
-            login(userData);
+            // Store user ID only, let UserProvider fetch full user object
+            sessionStorage.setItem("userId", data.user.userid);
 
             setSuccess("Login successful!");
-            setTimeout(() => navigate("/", { replace: true }), 1000);
+
+            // Navigate after short delay (optional but can help timing)
+            setTimeout(() => {
+                navigate("/");
+            }, 100);
+
         } catch (err) {
             setError(err.message);
         }

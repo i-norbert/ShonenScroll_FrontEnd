@@ -1,7 +1,9 @@
+// ChatWindow.js
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import "./ChatWindow.css";
+import API_BASE_URL from "../ApiBase";
 
 const ChatWindow = () => {
     const { id: friendId } = useParams();
@@ -9,6 +11,7 @@ const ChatWindow = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [friend, setFriend] = useState(null);
+    const [enlargedImage, setEnlargedImage] = useState(null);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -33,7 +36,7 @@ const ChatWindow = () => {
             body: JSON.stringify({
                 senderId: user.userid,
                 receiverId: parseInt(friendId),
-                content: newMessage
+                content: newMessage,
             }),
         });
 
@@ -50,9 +53,37 @@ const ChatWindow = () => {
         return msg.senderId === user.userid ? user : friend;
     };
 
-    if (!user || !friend) {
-        return <div className="chat-window">Loading chat...</div>;
-    }
+    const renderMessageContent = (msg) => {
+        try {
+            const parsed = JSON.parse(msg.content);
+            if (parsed.type === "chapter") {
+                return (
+                    <div className="chapter-card">
+                        <img
+                            src={`${API_BASE_URL}${parsed.thumbnail}`}
+                            alt={parsed.title}
+                            className="chapter-thumb"
+                            onClick={() => setEnlargedImage(`${API_BASE_URL}${parsed.thumbnail}`)}
+                        />
+                        <div className="chapter-info">
+                            <div className="chapter-title">{parsed.title}</div>
+                            <Link
+                                to={`/reading/${parsed.mangaId}`}
+                                className="chapter-link"
+                            >
+                                Read Chapter {parsed.chapterNumber}
+                            </Link>
+                        </div>
+                    </div>
+                );
+            }
+        } catch (err) {
+            // Not JSON, render as plain text
+        }
+        return <div className="message-content">{msg.content}</div>;
+    };
+
+    if (!user || !friend) return <div className="chat-window">Loading chat...</div>;
 
     return (
         <div className="chat-window">
@@ -68,22 +99,18 @@ const ChatWindow = () => {
 
                     return (
                         <div key={msg.messageid} className={`message-row ${isSent ? "sent" : "received"}`}>
-                            {!isSent && (
-                                <img src={sender.profilePicture} alt="pfp" className="message-pfp" />
-                            )}
+                            {!isSent && <img src={sender.profilePicture} alt="pfp" className="message-pfp" />}
                             <div className="message-bubble">
-                                <div className="message-content">{msg.content}</div>
+                                {renderMessageContent(msg)}
                                 <div className="message-time">
                                     {new Date(msg.timestamp).toLocaleString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
+                                        hour: "2-digit",
+                                        minute: "2-digit",
                                         hour12: true,
                                     })}
                                 </div>
                             </div>
-                            {isSent && (
-                                <img src={sender.profilePicture} alt="pfp" className="message-pfp" />
-                            )}
+                            {isSent && <img src={sender.profilePicture} alt="pfp" className="message-pfp" />}
                         </div>
                     );
                 })}
@@ -100,6 +127,13 @@ const ChatWindow = () => {
                 />
                 <button type="submit" className="send-button">Send</button>
             </form>
+
+            {enlargedImage && (
+                <div className="enlarged-image-modal" onClick={() => setEnlargedImage(null)}>
+                    <img src={enlargedImage} alt="Enlarged" className="enlarged-image" />
+                    <span className="close-button" onClick={() => setEnlargedImage(null)}>×</span>
+                </div>
+            )}
         </div>
     );
 };

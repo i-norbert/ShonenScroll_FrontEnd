@@ -79,11 +79,13 @@ const ChatPage = () => {
                                 />
                                 <div className="chat-info">
                                     <span className="chat-username">{chat.user.username}</span>
-                                    <span className="chat-last-message">{chat.lastMessage.content}</span>
+                                    <span className="chat-last-message">
+                        {chat.lastMessage.content.trim().startsWith("{") ? "Attachment" : chat.lastMessage.content}
+                    </span>
                                 </div>
                                 <span className="chat-time">
-                                    {new Date(chat.lastMessage.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
+                    {new Date(chat.lastMessage.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
                             </Link>
                         </li>
                     ))}
