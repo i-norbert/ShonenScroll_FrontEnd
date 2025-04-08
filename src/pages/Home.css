@@ -84,3 +84,82 @@
 .manga-details {
     text-align: center;
 }
+
+.carousel-banner {
+    width: 99vw;
+    overflow: hidden;
+    background: #111;
+    border-bottom: 2px solid #6e00ff;
+    padding: 5px 0;
+    margin-bottom: 20px;
+    height: 90px;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    width: fit-content;
+    animation: scroll-left 30s linear infinite;
+}
+
+.carousel-banner:hover .carousel-track {
+    animation-play-state: paused;
+}
+
+.carousel-item {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    color: white;
+    text-decoration: none;
+    white-space: nowrap;
+    min-width: 160px;
+    transition: transform 0.3s ease;
+}
+
+.carousel-item:hover {
+    transform: scale(1.05);
+}
+
+.carousel-image {
+    height: 60px;
+    width: auto;
+    margin-right: 10px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.carousel-title {
+    font-size: 0.9rem;
+    color: #f0f0f0;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .carousel-item {
+        margin: 0 10px;
+        min-width: 120px;
+    }
+
+    .carousel-image {
+        height: 50px;
+    }
+
+    .carousel-title {
+        font-size: 0.75rem;
+    }
+
+    .carousel-banner {
+        height: 80px;
+    }
+}
+

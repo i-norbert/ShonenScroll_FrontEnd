@@ -6,6 +6,7 @@ import API_BASE from '../ApiBase';
 
 const Home = () => {
     const [mangas, setMangas] = useState([]);
+    const [newestMangas, setNewestMangas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -27,6 +28,10 @@ const Home = () => {
                 }
                 const data = await response.json();
                 const shuffledMangas = shuffleArray(data);
+                const sortedNewest = [...data].sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                );
+                setNewestMangas(sortedNewest.slice(0, 10));
                 setMangas(shuffledMangas.slice(0, 12));
                 setLoading(false);
             } catch (err) {
@@ -38,18 +43,34 @@ const Home = () => {
         fetchMangas();
     }, []);
 
-    if (loading) {
-        return <div className="loading">Loading random mangas...</div>;
-    }
-
-    if (error) {
-        return <div className="error">Error: {error}</div>;
-    }
+    if (loading) return <div className="loading">Loading random mangas...</div>;
+    if (error) return <div className="error">Error: {error}</div>;
 
     return (
         <div className="home-container">
+            <div className="carousel-banner">
+                <div className="carousel-track">
+                    {[...newestMangas, ...newestMangas].map((manga, index) => (
+                        <Link
+                            key={`${manga.id}-${index}`}
+                            to={`/reading/${manga.id}`}
+                            className="carousel-item"
+                        >
+                            <img
+                                src={`${API_BASE}${manga.coverImage}`}
+                                alt={manga.title}
+                                className="carousel-image"
+                            />
+                            <span className="carousel-title">{manga.title}</span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+
             <h1 className="home-title">ShonenScrolls</h1>
             <p className="home-description">Dive into the world of manga!</p>
+
             <h2 className="random-manga-title">Random manga</h2>
             <div className="manga-list">
                 {mangas.map((manga) => (
