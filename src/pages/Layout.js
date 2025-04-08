@@ -34,12 +34,14 @@ const Layout = () => {
                         </>
                     ) : (
                         <>
-                            <li className="reg">
-                                <button onClick={logout} className="logout-btn">Logout</button>
+                            <li>
+                                <Link to="/myprofile" className="profile-link">
+                                    <img src={user.profilePicture} alt="profilePicture" className="profile-pic" />
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/myprofile">
-                                    {user.username ? `${user.username}'s Profile` : "My Profile"}
+                                <Link to="/friends">
+                                    Friends
                                 </Link>
                             </li>
                         </>

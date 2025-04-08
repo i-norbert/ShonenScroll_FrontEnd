@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+.profile-link {
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid transparent;
+    backdrop-filter: blur(4px);
+    box-shadow: none;
+    padding: 0 !important;
+}
 
+.profile-link:hover {
+    border-color: #ff00fb;
+    background-color: #8a2be2;
+    box-shadow: 0 0 10px #8a2be2aa;
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% !important;
+    object-fit: cover;
+}
 /* === Reset & Base Styles === */
 * {
     margin: 0;
@@ -195,3 +218,5 @@ li.reg .logout-btn:hover {
         align-items: center;
     }
 }
+
+

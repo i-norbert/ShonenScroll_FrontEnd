@@ -6,7 +6,7 @@ import API_BASE from '../ApiBase';
 
 
 const UserProfile = () => {
-    const { user, loading, login } = useContext(UserContext);
+    const { user, loading, login, logout } = useContext(UserContext);
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState("");
     const [editing, setEditing] = useState(false);
@@ -111,6 +111,7 @@ const UserProfile = () => {
                 )}
                 {status && <p className="status-text">{status}</p>}
             </div>
+            <button onClick={logout} className="neon-button">Logout</button>
         </div>
     );
 };

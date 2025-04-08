@@ -1,0 +1,81 @@
+.friend-manager {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #e0e0ff;
+    background-color: #0a001f;
+    border-radius: 20px;
+    box-shadow: 0 0 20px #7f00ff;
+}
+
+.title {
+    font-size: 2rem;
+    text-align: center;
+    color: #c770ff;
+    margin-bottom: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #8e44ff;
+    border-radius: 10px;
+    background: #1a0033;
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    background: #1f003f;
+    border: 1px solid #5500ff;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 0 10px #6a00ff88;
+}
+
+.pfp {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    border: 2px solid #bb00ff;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.status {
+    display: block;
+    font-size: 0.9rem;
+    color: #bbaaff;
+}
+
+.action-buttons button {
+    margin: 0 0.3rem;
+    padding: 0.4rem 0.7rem;
+    background: #5500ff;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.action-buttons button:hover {
+    background: #8e44ff;
+}
