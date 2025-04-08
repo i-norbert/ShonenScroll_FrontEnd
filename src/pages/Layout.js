@@ -2,6 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 import { useContext } from "react";
 import "./navstyle.css";
 import { UserContext } from "../UserContext";
+import { FaEnvelope } from "react-icons/fa"; // 📩 Font Awesome envelope
 
 const Layout = () => {
     const { user, logout } = useContext(UserContext);
@@ -35,13 +36,20 @@ const Layout = () => {
                     ) : (
                         <>
                             <li>
-                                <Link to="/myprofile" className="profile-link">
-                                    <img src={user.profilePicture} alt="profilePicture" className="profile-pic" />
+                                <Link to={`/chats`} className="message-link" title="Messages">
+                                    <FaEnvelope className="message-icon" />
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/friends">
-                                    Friends
+                                <Link to="/friends">Friends</Link>
+                            </li>
+                            <li>
+                                <Link to="/myprofile" className="profile-link">
+                                    <img
+                                        src={user.profilePicture}
+                                        alt="profile"
+                                        className="profile-pic"
+                                    />
                                 </Link>
                             </li>
                         </>

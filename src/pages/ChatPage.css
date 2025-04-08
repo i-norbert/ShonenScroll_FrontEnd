@@ -1,0 +1,134 @@
+/* ChatPage.css */
+
+.chat-inbox-container {
+    background-color: #0a0a15;
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.chat-header h2 {
+    font-size: 2rem;
+    color: #a05aff;
+    text-shadow: 0 0 8px #a05aff88;
+}
+
+.new-message-btn {
+    font-size: 1.8rem;
+    color: #a05aff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    text-shadow: 0 0 10px #a05aff;
+}
+
+.new-message-btn:hover {
+    transform: scale(1.2);
+    color: #ffffff;
+}
+
+.friends-dropdown {
+    position: absolute;
+    top: 5.5rem;
+    right: 2rem;
+    background: #1a1a2f;
+    border: 1px solid #a05aff;
+    border-radius: 10px;
+    z-index: 1000;
+    padding: 1rem;
+    width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 0 12px #a05aff88;
+}
+
+.dropdown-item {
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: #2a2a40;
+}
+
+.dropdown-item img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+    border: 1px solid #a05aff;
+}
+
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chat-list-item {
+    background-color: #15151f;
+    border: 1px solid #a05aff33;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+
+.chat-list-item:hover {
+    background-color: #1f1f30;
+}
+
+.chat-list-item a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+.chat-profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    border: 2px solid #a05aff;
+}
+
+.chat-info {
+    flex-grow: 1;
+}
+
+.chat-username {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #a05aff;
+    display: block;
+}
+
+.chat-last-message {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.chat-time {
+    font-size: 0.8rem;
+    color: #888;
+    white-space: nowrap;
+    margin-left: auto;
+}

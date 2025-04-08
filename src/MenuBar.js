@@ -10,6 +10,8 @@ import MangaReading from "./pages/MangaReading.js";
 import Login from "./pages/Login";
 import UserProfile from "./pages/UserProfile";
 import FriendManager from "./pages/FriendManager";
+import ChatPage from "./pages/ChatPage";
+import ChatWindow from "./pages/ChatWindow";
 
 export default function MenuBar() {
     return (
@@ -26,6 +28,8 @@ export default function MenuBar() {
                     <Route path="myprofile" element={<UserProfile />} />
                     <Route path="friends" element={<FriendManager />} />
                     <Route path="reading/:id" element={<MangaReading />}/>
+                    <Route path="chats" element={<ChatPage />} />
+                    <Route path="/chat/:id" element={<ChatWindow />} />
                 </Route>
             </Routes>
         </BrowserRouter>

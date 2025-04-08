@@ -218,5 +218,26 @@ li.reg .logout-btn:hover {
         align-items: center;
     }
 }
+.message-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.message-icon {
+    font-size: 1.5rem;
+    color: #a58dff;
+    filter: drop-shadow(0 0 3px #a58dff);
+    transition: transform 0.2s ease;
+}
+
+.message-link:hover .message-icon {
+    transform: scale(1.15);
+    color: #ffffff;
+    filter: drop-shadow(0 0 5px #d3c0ff);
+}
 
 
