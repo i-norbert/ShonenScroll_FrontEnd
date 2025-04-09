@@ -244,14 +244,19 @@ const MangaPage = () => {
                 {/* Chapter nav */}
                 <div className="chapter-navigation">
                     <button
-                        onClick={() => setCurrentChapter((c) => Math.max(0, c - 1))}
+                        onClick={() => (
+                            setCurrentChapter((c) => Math.max(0, c - 1)),
+                                setCurrentPage(0)
+                        )}
                         disabled={currentChapter === 0}
                     >
                         Previous Chapter
                     </button>
                     <button
-                        onClick={() =>
-                            setCurrentChapter((c) => Math.min(c + 1, manga.Chapters.length - 1))
+                        onClick={() => (
+                            setCurrentChapter((c) => Math.min(c + 1, manga.Chapters.length - 1)),
+                            setCurrentPage(0)
+                        )
                         }
                         disabled={currentChapter === manga.Chapters.length - 1}
                     >
