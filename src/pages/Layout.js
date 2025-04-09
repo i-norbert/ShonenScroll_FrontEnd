@@ -2,7 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 import { useContext } from "react";
 import "./navstyle.css";
 import { UserContext } from "../UserContext";
-import { FaEnvelope } from "react-icons/fa"; // 📩 Font Awesome envelope
+import { FaHome, FaFire, FaSearch, FaUserFriends, FaUserPlus, FaSignInAlt, FaEnvelope, FaUserCircle, FaClock } from "react-icons/fa";
 
 const Layout = () => {
     const { user, logout } = useContext(UserContext);
@@ -10,41 +10,63 @@ const Layout = () => {
     return (
         <>
             <nav className="NavBar">
-                <ul>
+                <ul className="nav-links">
                     <li>
-                        <Link to="/">Home</Link>
+                        <Link to="/" className="nav-item">
+                            <FaHome className="icon" />
+                            <span>Home</span>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/latest">Latest</Link>
+                        <Link to="/latest" className="nav-item">
+                            <FaClock className="icon" />
+                            <span>Latest</span>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/hottest">Hottest</Link>
+                        <Link to="/hottest" className="nav-item">
+                            <FaFire className="icon" />
+                            <span>Hottest</span>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/search">Search</Link>
+                        <Link to="/search" className="nav-item">
+                            <FaSearch className="icon" />
+                            <span>Search</span>
+                        </Link>
                     </li>
 
                     {!user ? (
                         <>
-                            <li className="reg">
-                                <Link to="/register">Register</Link>
+                            <li>
+                                <Link to="/register" className="nav-item">
+                                    <FaUserPlus className="icon" />
+                                    <span>Register</span>
+                                </Link>
                             </li>
-                            <li className="reg">
-                                <Link to="/login">Login</Link>
+                            <li>
+                                <Link to="/login" className="nav-item">
+                                    <FaSignInAlt className="icon" />
+                                    <span>Login</span>
+                                </Link>
                             </li>
                         </>
                     ) : (
                         <>
                             <li>
-                                <Link to={`/chats`} className="message-link" title="Messages">
-                                    <FaEnvelope className="message-icon" />
+                                <Link to="/chats" className="nav-item" title="Messages">
+                                    <FaEnvelope className="icon" />
+                                    <span>Chats</span>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/friends">Friends</Link>
+                                <Link to="/friends" className="nav-item">
+                                    <FaUserFriends className="icon" />
+                                    <span>Friends</span>
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/myprofile" className="profile-link">
+                                <Link to="/myprofile" className="nav-item profile-link">
                                     <img
                                         src={user.profilePicture}
                                         alt="profile"
