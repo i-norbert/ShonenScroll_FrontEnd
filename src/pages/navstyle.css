@@ -64,8 +64,8 @@ body {
 }
 
 .profile-pic {
-    width: 32px;
-    height: 32px;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     border: 2px solid #ff57d2;
     object-fit: cover;
@@ -74,7 +74,7 @@ body {
 }
 
 .profile-pic:hover {
-    transform: scale(1.1);
+    transform: scale(1.01);
 }
 
 @media screen and (max-width: 768px) {
