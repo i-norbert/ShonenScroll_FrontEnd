@@ -1,9 +1,9 @@
 // UserContext.js
 import React, { createContext, useState, useEffect } from "react";
-
+import API_BASE from "./ApiBase";
 export const UserContext = createContext();
 
-import API_BASE from "./ApiBase";
+
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);

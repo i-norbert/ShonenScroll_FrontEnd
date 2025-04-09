@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import API_BASE from '../ApiBase';
 import "./Home.css";
 
-import API_BASE from '../ApiBase';
+
 
 const Home = () => {
     const [mangas, setMangas] = useState([]);
@@ -70,8 +71,6 @@ const Home = () => {
 
             <h1 className="home-title">ShonenScrolls</h1>
             <p className="home-description">Dive into the world of manga!</p>
-
-            <h2 className="random-manga-title">Random manga</h2>
             <div className="manga-list">
                 {mangas.map((manga) => (
                     <Link key={manga.id} to={`/reading/${manga.id}`}>
