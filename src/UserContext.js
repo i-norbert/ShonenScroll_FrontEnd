@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
 
-const API_BASE = "http://localhost:5000/auth";
+import API_BASE from "./ApiBase";
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
             const storedUserId = sessionStorage.getItem("userId");
             if (storedUserId) {
                 try {
-                    const res = await fetch(`${API_BASE}/users/${storedUserId}`);
+                    const res = await fetch(`${API_BASE}/auth/users/${storedUserId}`);
                     const data = await res.json();
                     setUser(data);
                 } catch (err) {

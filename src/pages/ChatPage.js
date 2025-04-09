@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import "./ChatPage.css";
+import API_BASE from "../ApiBase"
 
 const ChatPage = () => {
     const { id } = useParams();
@@ -12,18 +13,18 @@ const ChatPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:5000/messages/chats/${user.userid}`)
+        fetch(`${API_BASE}/messages/chats/${user.userid}`)
             .then(res => res.json())
             .then(setChats);
 
-        fetch(`http://localhost:5000/friends/list/${user.userid}`)
+        fetch(`${API_BASE}/friends/list/${user.userid}`)
             .then(res => res.json())
             .then(setFriends);
     }, [id, user.userid]);
 
     const startChat = async (friendId) => {
         try {
-            await fetch("http://localhost:5000/messages/start", {
+            await fetch(`${API_BASE}/messages/start`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

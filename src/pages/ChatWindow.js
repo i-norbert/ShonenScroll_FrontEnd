@@ -17,11 +17,11 @@ const ChatWindow = () => {
     useEffect(() => {
         if (!user) return;
 
-        fetch(`http://localhost:5000/messages/conversation/${user.userid}/${friendId}`)
+        fetch(`${API_BASE_URL}/messages/conversation/${user.userid}/${friendId}`)
             .then(res => res.json())
             .then(setMessages);
 
-        fetch(`http://localhost:5000/auth/users/${friendId}`)
+        fetch(`${API_BASE_URL}/auth/users/${friendId}`)
             .then(res => res.json())
             .then(setFriend);
     }, [user, friendId]);
@@ -30,7 +30,7 @@ const ChatWindow = () => {
         e.preventDefault();
         if (!newMessage.trim()) return;
 
-        const res = await fetch("http://localhost:5000/messages", {
+        const res = await fetch(`${API_BASE_URL}/messages`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
