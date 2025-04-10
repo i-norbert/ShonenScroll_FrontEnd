@@ -3,6 +3,8 @@ import { UserContext } from "../UserContext";
 import "./UserProfile.css";
 
 import API_BASE from '../ApiBase';
+import {Link} from "react-router-dom";
+import Favorites from "./Favorites";
 
 
 const UserProfile = () => {
@@ -95,6 +97,7 @@ const UserProfile = () => {
             />
         ))}
     </div>
+
 </div>
                         </label>
                         <div className="button-group">
@@ -107,11 +110,13 @@ const UserProfile = () => {
                         <p className="neon-text"><strong>Username:</strong> {user.username}</p>
                         <p className="neon-text"><strong>Email:</strong> {user.email}</p>
                         <button onClick={() => setEditing(true)} className="neon-button">Edit Profile</button>
+                        <button onClick={logout} className="neon-button">Logout</button>
                     </>
                 )}
                 {status && <p className="status-text">{status}</p>}
             </div>
-            <button onClick={logout} className="neon-button">Logout</button>
+
+            <Favorites/>
         </div>
     );
 };

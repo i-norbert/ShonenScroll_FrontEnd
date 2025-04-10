@@ -13,6 +13,7 @@ import FriendManager from "./pages/FriendManager";
 import ChatPage from "./pages/ChatPage";
 import ChatWindow from "./pages/ChatWindow";
 import {UserProvider} from "./UserContext";
+import Favorites from "./pages/Favorites";
 
 export default function MenuBar() {
     return (
@@ -31,6 +32,7 @@ export default function MenuBar() {
                     <Route path="reading/:id" element={<MangaReading />}/>
                     <Route path="chats" element={<ChatPage />} />
                     <Route path="/chat/:id" element={<ChatWindow />} />
+                    <Route path="favorites" element={<Favorites />} />
                 </Route>
             </Routes>
 

@@ -8,6 +8,7 @@
     align-items: center;
     text-align: center;
     font-family: 'Carter One', sans-serif;
+
 }
 
 .home-title {
@@ -93,6 +94,24 @@
 .manga-details {
     text-align: center;
 }
+.like-button {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    margin-top: 0.3rem;
+    font-size: 1rem;
+}
+
+.heart-icon {
+    font-size: 1.2rem;
+}
+
+.like-count {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
 
 /* Carousel */
 .carousel-banner {
@@ -276,3 +295,33 @@
         padding: 0 5px;
     }
 }
+.favorite-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 1.5rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    margin-left: 0.5rem;
+}
+
+.favorite-icon-button:hover {
+    color: #d98eff;
+    transform: scale(1.15);
+}
+
+.favorite-icon-button.favorited {
+    color: #d98eff;
+    text-shadow: 0 0 8px #d98eff, 0 0 12px #8e44ec;
+}
+
+.like-count {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-left: 0.3rem;
+}
+
