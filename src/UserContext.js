@@ -1,6 +1,7 @@
 // UserContext.js
 import React, { createContext, useState, useEffect } from "react";
 import API_BASE from "./ApiBase";
+import {useNavigate} from "react-router-dom";
 export const UserContext = createContext();
 
 
@@ -8,6 +9,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -33,13 +35,14 @@ export const UserProvider = ({ children }) => {
 
 
     const login = (userData) => {
-        sessionStorage.setItem("userId", userData.id);
+        sessionStorage.setItem("userId", userData.userid);
         setUser(userData);
     };
 
     const logout = () => {
         sessionStorage.clear();
         setUser(null);
+        navigate("/");
     };
 
     return (

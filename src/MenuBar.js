@@ -12,12 +12,13 @@ import UserProfile from "./pages/UserProfile";
 import FriendManager from "./pages/FriendManager";
 import ChatPage from "./pages/ChatPage";
 import ChatWindow from "./pages/ChatWindow";
+import {UserProvider} from "./UserContext";
 
 export default function MenuBar() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout />}>
+                <Route path="/" element={<UserProvider><Layout /></UserProvider>}>
                     <Route index element={<Home />} />
                     <Route path="latest" element={<Latest />} />
                     <Route path="hottest" element={<Hottest />} />
@@ -32,6 +33,7 @@ export default function MenuBar() {
                     <Route path="/chat/:id" element={<ChatWindow />} />
                 </Route>
             </Routes>
+
         </BrowserRouter>
     );
 }

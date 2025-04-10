@@ -1,11 +1,16 @@
+#root {
+    height: 100dvh;
+    display: flex;
+    flex-flow: column;
+}
+
 .chat-window {
     display: flex;
     flex-direction: column;
-    height: 93vh;
+    height: 93dvh;
     background: linear-gradient(to bottom, #0b0b17, #161629);
     color: #fff;
     overflow: hidden;
-    border-radius: 12px;
     box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
 }
 
@@ -127,6 +132,7 @@
     cursor: pointer;
     font-weight: bold;
     transition: transform 0.2s ease-in-out;
+    height: 2.5rem;
 }
 
 .send-button:hover {

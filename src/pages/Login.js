@@ -1,17 +1,19 @@
 // login.js
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
 import API_BASE from '../ApiBase';
+import {UserContext} from "../UserContext";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const {login} = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -31,7 +33,7 @@ export default function Login() {
 
             // Store user ID only, let UserProvider fetch full user object
             sessionStorage.setItem("userId", data.user.userid);
-
+            login(data.user);
             setSuccess("Login successful!");
 
             // Navigate after short delay (optional but can help timing)

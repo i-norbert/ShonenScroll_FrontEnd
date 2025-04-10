@@ -47,7 +47,7 @@ const UserProfile = () => {
             if (!response.ok) throw new Error("Failed to update profile");
 
             const { user: updatedUserData } = await response.json();
-
+            console.log(updatedUserData);
             // ✅ Update context with new data
             login(updatedUserData);
 

@@ -8,8 +8,6 @@
     align-items: center;
     text-align: center;
     font-family: 'Carter One', sans-serif;
-    padding: 0 20px;
-    min-height: 100vh;
 }
 
 .home-title {
@@ -98,7 +96,7 @@
 
 /* Carousel */
 .carousel-banner {
-    width: 99vw;
+    width: 100%;
     overflow: hidden;
     background: linear-gradient(to right, #0f001f, #1b0033);
     border-bottom: 2px solid #6e00ff;
