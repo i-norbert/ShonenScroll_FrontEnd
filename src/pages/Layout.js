@@ -3,6 +3,7 @@ import { useContext } from "react";
 import "./navstyle.css";
 import { UserContext } from "../UserContext";
 import { FaHome, FaFire, FaSearch, FaUserFriends, FaUserPlus, FaSignInAlt, FaEnvelope, FaUserCircle, FaClock } from "react-icons/fa";
+import Footer from "./Footer";
 
 const Layout = () => {
     const { user, logout } = useContext(UserContext);

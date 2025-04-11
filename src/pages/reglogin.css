@@ -1,53 +1,97 @@
 @import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
 
+body {
+    background: #0b0013;
+    margin: 0;
+    padding: 0;
+    font-family: 'Carter One', cursive;
+    color: white;
+}
+
 .Container {
-    background: rgb(82,5,123);
-    background: linear-gradient(180deg, rgba(82,5,123,1) 10%, rgba(0,0,0,1) 100%);
-    color: #BC6FF1;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 40px 30px;
+    background: linear-gradient(145deg, #1b0024, #0e0015);
+    border-radius: 20px;
+    box-shadow: 0 0 15px #a100ff88, 0 0 30px #ff4dc855 inset;
     text-align: center;
-    font-family: 'Carter One', sans-serif;
-    padding: 0 20px;
+    border: 2px solid #a100ff;
+    position: relative;
+    z-index: 1;
 }
 
 .Container h2 {
-    font-size: 28px;
+    color: #ff4dc8;
     margin-bottom: 20px;
-    color: #fff;
+    text-shadow: 0 0 5px #ff4dc8aa;
+    font-size: 32px;
 }
 
 .textfield {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.textfield label {
+    color: #c084fc !important;
 }
 
 .textfield .MuiInput-underline:before {
-    border-bottom: 2px solid #bb86fc !important;
-}
-
-.textfield .MuiInput-underline:hover:not(.Mui-disabled):before {
-    border-bottom: 2px solid #d08aff !important;
+    border-bottom: 1px solid #a100ff;
 }
 
 .textfield .MuiInput-underline:after {
-    border-bottom: 2px solid #bb86fc !important;
+    border-bottom: 2px solid #ff4dc8;
 }
 
-button.MuiButton-containedSuccess {
-    font-family: 'Carter One', cursive !important;
-    text-transform: uppercase;
-    background-color: #6a0dad !important;
-    color: white !important;
-    padding: 10px 20px;
-    border-radius: 10px;
-    transition: 0.3s ease;
+.textfield input {
+    color: white;
 }
 
-button.MuiButton-containedSuccess:hover {
-    background-color: #bb86fc !important;
+.MuiButton-containedSuccess {
+    background-color: #a100ff !important;
+    color: white;
+    box-shadow: 0 0 10px #a100ff88;
+    transition: all 0.3s ease;
+}
+
+.MuiButton-containedSuccess:hover {
+    background-color: #ff4dc8 !important;
+    box-shadow: 0 0 20px #ff4dc8cc;
     transform: scale(1.05);
+}
+
+.error {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.success {
+    color: #4caf50;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* RESPONSIVE STYLES */
+@media (max-width: 600px) {
+    .Container {
+        padding: 20px 15px;
+        width: 90%;
+    }
+
+    .Container h2 {
+        font-size: 28px;
+    }
+
+    .textfield label {
+        font-size: 14px;
+    }
+
+    .MuiButton-containedSuccess {
+        font-size: 14px;
+        width: 100%;
+    }
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import API_BASE from "../ApiBase";
-import "./Home.css";
+import styles from "./Home.module.css";
 
 const Home = () => {
     const { user } = useContext(UserContext);
@@ -93,54 +93,54 @@ const Home = () => {
     const isLikedByUser = (manga) =>
         user && manga.LikedUsers?.some((u) => u.userid === user.userid);
 
-    if (loading) return <div className="loading">Loading random mangas...</div>;
-    if (error) return <div className="error">Error: {error}</div>;
+    if (loading) return <div className={styles["loading"]}>Loading random mangas...</div>;
+    if (error) return <div className={styles["error"]}>Error: {error}</div>;
 
     return (
-        <div className="home-container">
-            <div className="carousel-banner">
-                <div className="carousel-track">
+        <div className={styles["home-container"]}>
+            <div className={styles["carousel-banner"]}>
+                <div className={styles["carousel-track"]}>
                     {[...newestMangas, ...newestMangas].map((manga, index) => (
                         <Link
                             key={`${manga.id}-${index}`}
                             to={`/reading/${manga.id}`}
-                            className="carousel-item"
+                            className={styles["carousel-item"]}
                         >
                             <img
                                 src={`${API_BASE}${manga.coverImage}`}
                                 alt={manga.title}
-                                className="carousel-image"
+                                className={styles["carousel-image"]}
                             />
-                            <span className="carousel-title">{manga.title}</span>
+                            <span className={styles["carousel-title"]}>{manga.title}</span>
                         </Link>
                     ))}
                 </div>
             </div>
 
-            <h1 className="home-title">ShonenScrolls</h1>
-            <p className="home-description">Dive into the world of manga!</p>
-            <div className="manga-list">
+            <h1 className={styles["home-title"]}>ShonenScrolls</h1>
+            <p className={styles["home-description"]}>Dive into the world of manga!</p>
+            <div className={styles["manga-list"]}>
                 {mangas.map((manga) => (
                     <Link key={manga.id} to={`/reading/${manga.id}`}>
-                        <div className="manga-card">
+                        <div className={styles["manga-card"]}>
                             <img
                                 src={`${API_BASE}${manga.coverImage}`}
                                 alt={manga.title}
-                                className="manga-cover"
+                                className={styles["manga-cover"]}
                             />
-                            <h3 className="manga-title">{manga.title}</h3>
-                            <div className="manga-details">
+                            <h3 className={styles["manga-title"]}>{manga.title}</h3>
+                            <div className={styles["manga-details"]}>
                                 <p>Author: {manga.author}</p>
 
                                 <div
-                                    className={`favorite-icon-button ${isLikedByUser(manga) ? "favorited" : ""}`}
+                                    className={styles[`favorite-icon-button`]+ (isLikedByUser(manga) ? styles.favorited : "")}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         handleLikeToggle(manga.id, isLikedByUser(manga));
                                     }}
                                 >
-                                    <i className="fas fa-heart">Favorite</i>
+                                    <i className="fas fa-heart"/>
                                 </div>
                             </div>
                         </div>

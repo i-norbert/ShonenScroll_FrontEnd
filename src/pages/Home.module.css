@@ -12,11 +12,19 @@
 }
 
 .home-title {
-    font-size: 4rem;
-    color: #892CDC;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    margin-top: 30px;
+
+    font-size: 5rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow:
+            0 0 10px #4b0082,
+            0 0 20px #4b0082,
+            0 0 30px #4b0082,
+            0 0 40px #5a2d6b,
+            0 0 50px #5a2d6b;
 }
+
+
 
 .home-description {
     font-size: 1.5rem;
@@ -299,29 +307,34 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #999;
-    font-size: 1.5rem;
-    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 10px 14px;
+    border-radius: 9999px;
+    background: rgba(75, 0, 130, 0.2); /* subtle background */
+    color: #aaa;
     cursor: pointer;
-    padding: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    margin-left: 0.5rem;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
 }
 
 .favorite-icon-button:hover {
-    color: #d98eff;
-    transform: scale(1.15);
+    background: rgba(138, 43, 226, 0.4);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(186, 85, 211, 0.6),
+    0 0 30px rgba(138, 43, 226, 0.4);
+}
+
+.favorite-icon-button i {
+    font-size: 20px;
 }
 
 .favorite-icon-button.favorited {
-    color: #d98eff;
-    text-shadow: 0 0 8px #d98eff, 0 0 12px #8e44ec;
+    color: #ff66cc;
+    text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff66cc;
+    background: rgba(255, 105, 180, 0.15);
 }
 
-.like-count {
-    font-size: 0.9rem;
-    color: #ccc;
-    margin-left: 0.3rem;
-}
+
+
 

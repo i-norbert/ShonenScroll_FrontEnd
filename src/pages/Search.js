@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Search.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import API_BASE from "../ApiBase";
 import { Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
 export default function Search() {
+    const { user } = useContext(UserContext);
     const [searchQuery, setSearchQuery] = useState("");
     const [authorQuery, setAuthorQuery] = useState("");
     const [sortOption, setSortOption] = useState("titleAsc");
@@ -15,6 +17,21 @@ export default function Search() {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [favorites, setFavorites] = useState([]);
+
+    useEffect(() => {
+        const fetchFavorites = async () => {
+            if (!user) return;
+            try {
+                const res = await fetch(`${API_BASE}/manga/user/${user.userid}`);
+                const data = await res.json();
+                setFavorites(data.map(m => m.id));
+            } catch (err) {
+                console.error("Failed to fetch liked mangas:", err);
+            }
+        };
+        fetchFavorites();
+    }, [user]);
 
     const handleSearch = async (pageNumber = 1) => {
         if (!searchQuery.trim() && !authorQuery.trim()) return;
@@ -42,53 +59,82 @@ export default function Search() {
         }
     };
 
+    const handleLikeToggle = async (mangaId, isLiked) => {
+        if (!user) {
+            alert("Please log in to like mangas.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/manga/${isLiked ? "unlike" : "like"}`, {
+                method: isLiked ? "DELETE" : "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: user.userid, mangaId }),
+            });
+
+            if (!response.ok) throw new Error("Failed to update like");
+
+            setFavorites((prev) =>
+                isLiked ? prev.filter(id => id !== mangaId) : [...prev, mangaId]
+            );
+        } catch (err) {
+            console.error("Like update failed:", err);
+        }
+    };
+
+    const isLikedByUser = (mangaId) => user && favorites.includes(mangaId);
+
     return (
         <div className="search-container">
-            <h2>Search for Manga</h2>
-            <br />
-            <TextField
-                className="textfield"
-                label="Search by Title"
-                variant="standard"
-                color="secondary"
-                sx={{ input: { color: "white" } }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <TextField
-                className="textfield"
-                label="Search by Author"
-                variant="standard"
-                color="secondary"
-                sx={{ input: { color: "white" }, marginLeft: 2 }}
-                value={authorQuery}
-                onChange={(e) => setAuthorQuery(e.target.value)}
-            />
-            <TextField
-                className="textfield"
-                select
-                label="Sort By"
-                variant="standard"
-                color="secondary"
-                value={sortOption}
-                sx={{ marginLeft: 2, minWidth: 150 }}
-                onChange={(e) => setSortOption(e.target.value)}
-            >
-                <MenuItem value="titleAsc">Title A-Z</MenuItem>
-                <MenuItem value="titleDesc">Title Z-A</MenuItem>
-                <MenuItem value="newest">Newest Uploads</MenuItem>
-                <MenuItem value="oldest">Oldest Uploads</MenuItem>
-            </TextField>
-            <br />
-            <Button
-                variant="contained"
-                color="success"
-                sx={{ mt: 2 }}
-                onClick={() => handleSearch(1)}
-                disabled={loading}
-            >
-                {loading ? "Searching..." : "Search"}
-            </Button>
+            <h2 className="search-header">Search for Manga</h2>
+
+            <div className="search-filters">
+                <TextField
+                    className="textfield"
+                    label="Search by Title"
+                    variant="standard"
+                    color="secondary"
+                    sx={{ input: { color: "white" } }}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    fullWidth
+                />
+                <TextField
+                    className="textfield"
+                    label="Search by Author"
+                    variant="standard"
+                    color="secondary"
+                    sx={{ input: { color: "white" } }}
+                    value={authorQuery}
+                    onChange={(e) => setAuthorQuery(e.target.value)}
+                    fullWidth
+                />
+                <TextField
+                    className="textfield"
+                    select
+                    label="Sort By"
+                    variant="standard"
+                    color="secondary"
+                    value={sortOption}
+                    sx={{ minWidth: 150 }}
+                    onChange={(e) => setSortOption(e.target.value)}
+                >
+                    <MenuItem value="titleAsc">Title A-Z</MenuItem>
+                    <MenuItem value="titleDesc">Title Z-A</MenuItem>
+                    <MenuItem value="newest">Newest Uploads</MenuItem>
+                    <MenuItem value="oldest">Oldest Uploads</MenuItem>
+                </TextField>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 2, width: '100%' }}
+                    onClick={() => handleSearch(1)}
+                    disabled={loading}
+                >
+                    {loading ? "Searching..." : "Search"}
+                </Button>
+            </div>
 
             {error && <p className="error">{error}</p>}
 
@@ -107,8 +153,16 @@ export default function Search() {
                                     className="manga-cover"
                                 />
                                 <h3 className="manga-title">{manga.title}</h3>
-                                <div className="manga-details">
-                                    <p>Author: {manga.author}</p>
+                                <p className="manga-author">Author: {manga.author}</p>
+                                <div
+                                    className={`favorite-icon ${isLikedByUser(manga.id) ? "favorited" : ""}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleLikeToggle(manga.id, isLikedByUser(manga.id));
+                                    }}
+                                >
+                                    <i className="fas fa-heart" />
                                 </div>
                             </div>
                         </Link>
@@ -116,14 +170,21 @@ export default function Search() {
                 </div>
             )}
 
-
             {totalPages > 1 && (
                 <div className="pagination">
-                    <Button onClick={() => handleSearch(page - 1)} disabled={page === 1}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => handleSearch(page - 1)}
+                        disabled={page === 1}
+                    >
                         Prev
                     </Button>
                     <span>Page {page} of {totalPages}</span>
-                    <Button onClick={() => handleSearch(page + 1)} disabled={page === totalPages}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => handleSearch(page + 1)}
+                        disabled={page === totalPages}
+                    >
                         Next
                     </Button>
                 </div>

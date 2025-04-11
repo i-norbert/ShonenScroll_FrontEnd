@@ -40,6 +40,12 @@ export default function Register() {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+            handleRegister(); // Trigger the registration if Enter is pressed
+        }
+    };
+
     return (
         <div className="Container">
             <h2>Register</h2>
@@ -55,6 +61,7 @@ export default function Register() {
                 sx={{ input: { color: "white" } }}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                onKeyPress={handleKeyPress} // Listen for the Enter key
             />
             <br />
             <TextField
@@ -65,6 +72,7 @@ export default function Register() {
                 sx={{ input: { color: "white" } }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress} // Listen for the Enter key
             />
             <br />
             <TextField
@@ -77,6 +85,7 @@ export default function Register() {
                 sx={{ input: { color: "white" } }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={handleKeyPress} // Listen for the Enter key
             />
             <br />
             <Button

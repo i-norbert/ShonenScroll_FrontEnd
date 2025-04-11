@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // ✅ Add Link from react-router-dom
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Latest.css";
-
-import API_BASE from '../ApiBase';
+import API_BASE from "../ApiBase";
+import { UserContext } from "../UserContext";
 
 export default function Latest() {
+    const { user } = useContext(UserContext);
     const [mangas, setMangas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -12,16 +13,27 @@ export default function Latest() {
     useEffect(() => {
         const fetchMangas = async () => {
             try {
-                const response = await fetch(`${API_BASE}/manga`);
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error("Failed to fetch mangas.");
-                }
+                const [mangaRes, favoritesRes] = await Promise.all([
+                    fetch(`${API_BASE}/manga`),
+                    user
+                        ? fetch(`${API_BASE}/manga/user/${user.userid}`)
+                        : Promise.resolve({ ok: true, json: () => [] }),
+                ]);
 
-                // Filter mangas that have chapters
-                const filteredMangas = data.filter(manga => manga.Chapters.length > 0);
+                if (!mangaRes.ok) throw new Error("Failed to fetch mangas");
 
-                // Sort mangas by latest chapter date
+                const mangaData = await mangaRes.json();
+                const favoritesData = user ? await favoritesRes.json() : [];
+
+                const filteredMangas = mangaData
+                    .filter((manga) => manga.Chapters.length > 0)
+                    .map((m) => ({
+                        ...m,
+                        LikedUsers: favoritesData.some((f) => f.id === m.id)
+                            ? [{ userid: user.userid }]
+                            : [],
+                    }));
+
                 filteredMangas.sort((a, b) => {
                     const latestChapterA = a.Chapters[0]?.createdAt;
                     const latestChapterB = b.Chapters[0]?.createdAt;
@@ -37,15 +49,46 @@ export default function Latest() {
         };
 
         fetchMangas();
-    }, []);
+    }, [user]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const handleLikeToggle = async (mangaId, isLiked) => {
+        if (!user) {
+            alert("Please log in to like mangas.");
+            return;
+        }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+        try {
+            const response = await fetch(`${API_BASE}/manga/${isLiked ? "unlike" : "like"}`, {
+                method: isLiked ? "DELETE" : "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: user.userid, mangaId }),
+            });
+
+            if (!response.ok) throw new Error("Failed to update like");
+
+            setMangas((prev) =>
+                prev.map((manga) =>
+                    manga.id === mangaId
+                        ? {
+                            ...manga,
+                            likes: isLiked ? manga.likes - 1 : manga.likes + 1,
+                            LikedUsers: isLiked
+                                ? manga.LikedUsers.filter((u) => u.userid !== user.userid)
+                                : [...(manga.LikedUsers || []), { userid: user.userid }],
+                        }
+                        : manga
+                )
+            );
+        } catch (err) {
+            console.error("Like update failed:", err);
+        }
+    };
+
+    const isLikedByUser = (manga) =>
+        user && manga.LikedUsers?.some((u) => u.userid === user.userid);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div className="manga-page">
@@ -69,11 +112,22 @@ export default function Latest() {
                                 />
                                 <div className="manga-details">
                                     <h3>{manga.title}</h3>
-                                    <p>Author: {manga.author}</p>
                                     <p>
                                         Latest Chapter: {firstChapter.title} -{" "}
                                         {new Date(firstChapter.createdAt).toLocaleDateString()}
                                     </p>
+                                    <div
+                                        className={`favorite-icon-button ${
+                                            isLikedByUser(manga) ? "favorited" : ""
+                                        }`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleLikeToggle(manga.id, isLikedByUser(manga));
+                                        }}
+                                    >
+                                        <i className="fas fa-heart" />
+                                    </div>
                                 </div>
                             </div>
                         </Link>

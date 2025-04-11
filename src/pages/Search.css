@@ -1,23 +1,19 @@
 /* SearchPage.css */
 body {
+
     background: rgb(82,5,123);
     background: linear-gradient(180deg, rgba(82,5,123,1) 10%, rgba(0,0,0,1) 100%);
     color: #BC6FF1;
-    min-height: 100vh ;
 }
 
 .search-container {
     color: #BC6FF1;
     font-family: 'Carter One', sans-serif;
-    padding: 20px;
     text-align: center;
     max-width: 800px;
-    margin: 0 auto;
+    margin: auto;
 }
 
-.textfield {
-    margin: 10px 0;
-}
 
 .search-results {
     display: flex;
@@ -63,3 +59,20 @@ button:disabled {
     align-items: center;
     gap: 20px;
 }
+.favorite-icon-button {
+    cursor: pointer;
+    margin-top: 5px;
+    color: #888;
+    font-size: 1.2rem;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.favorite-icon-button:hover {
+    color: #ff4081;
+}
+
+.favorite-icon-button.favorited {
+    color: #ff4081;
+    text-shadow: 0 0 8px #ff4081;
+}
+

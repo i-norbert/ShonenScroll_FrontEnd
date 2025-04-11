@@ -32,7 +32,7 @@ const UserProfile = () => {
         e.preventDefault();
         setStatus("Saving...");
 
-        const userId = user?.userid || user?.id;
+        const userId = user?.userid;
         if (!userId) {
             console.error("❌ No valid user ID found for update:", user);
             setStatus("❌ Unable to update profile.");

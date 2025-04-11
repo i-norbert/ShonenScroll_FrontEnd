@@ -1,19 +1,18 @@
-// login.js
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import "./reglogin.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
 import API_BASE from '../ApiBase';
-import {UserContext} from "../UserContext";
+import { UserContext } from "../UserContext";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const {login} = useContext(UserContext);
+    const { login } = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -46,6 +45,12 @@ export default function Login() {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+            handleLogin(); // Trigger the login if Enter is pressed
+        }
+    };
+
     return (
         <div className="Container">
             <h2>Login</h2>
@@ -60,6 +65,7 @@ export default function Login() {
                 sx={{ input: { color: "white" } }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress} // Listen for the Enter key
             />
             <br />
             <TextField
@@ -72,12 +78,13 @@ export default function Login() {
                 sx={{ input: { color: "white" } }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={handleKeyPress} // Listen for the Enter key
             />
             <br />
             <Button
                 variant="contained"
                 color="success"
-                sx={{ ml: 30 }}
+                sx={{ mt: 2 }}
                 onClick={handleLogin}
             >
                 Login

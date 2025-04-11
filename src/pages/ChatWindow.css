@@ -2,6 +2,7 @@
     height: 100dvh;
     display: flex;
     flex-flow: column;
+    background: linear-gradient(to bottom, #0b0b17, #161629);
 }
 
 .chat-window {

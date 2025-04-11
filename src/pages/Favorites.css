@@ -1,0 +1,29 @@
+/* Container for the whole Favorites page */
+.manga-page {
+    border: 4px solid #ff69b4; /* Bright pink border */
+    border-radius: 15px;  /* Rounded corners */
+    padding: 20px;  /* Padding to keep the content inside the border */
+    background: #1e1e1e;  /* Dark background to contrast the border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+    max-width: 90%;  /* Ensure it doesn't stretch too wide */
+    margin: 20px auto;  /* Center the container */
+}
+
+/* Styling for the remove button */
+.remove-favorite-btn {
+    background-color: transparent;
+    color: #ff69b4;  /* Pink text */
+    border: 1px solid #ff69b4;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for remove button */
+.remove-favorite-btn:hover {
+    background-color: #ff69b4;  /* Pink background on hover */
+    color: #fff;  /* White text when hovered */
+}
