@@ -1,10 +1,8 @@
-// UserContext.js
 import React, { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import API_BASE from "./ApiBase";
-import {useNavigate} from "react-router-dom";
+
 export const UserContext = createContext();
-
-
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -13,19 +11,28 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const storedUserId = sessionStorage.getItem("userId");
-            if (storedUserId) {
-                try {
-                    const res = await fetch(`${API_BASE}/auth/users/${storedUserId}`);
-                    const data = await res.json();
-                    setUser(data);
-                } catch (err) {
-                    console.error("Failed to load user:", err);
-                    setUser(null);
-                } finally {
-                    setLoading(false);
-                }
-            } else {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/auth/me`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!res.ok) throw new Error("Token invalid or expired");
+
+                const data = await res.json();
+                setUser(data.user);
+            } catch (err) {
+                console.error("❌ Failed to auto-login with token:", err);
+                localStorage.removeItem("token");
+                setUser(null);
+            } finally {
                 setLoading(false);
             }
         };
@@ -33,14 +40,13 @@ export const UserProvider = ({ children }) => {
         fetchUser();
     }, []);
 
-
-    const login = (userData) => {
-        sessionStorage.setItem("userId", userData.userid);
+    const login = (userData, token) => {
+        localStorage.setItem("token", token);
         setUser(userData);
     };
 
     const logout = () => {
-        sessionStorage.clear();
+        localStorage.removeItem("token");
         setUser(null);
         navigate("/");
     };

@@ -32,7 +32,7 @@ export default function Login() {
 
             // Store user ID only, let UserProvider fetch full user object
             sessionStorage.setItem("userId", data.user.userid);
-            login(data.user);
+            login(data.user,data.token);
             setSuccess("Login successful!");
 
             // Navigate after short delay (optional but can help timing)
@@ -62,7 +62,7 @@ export default function Login() {
                 label="Email"
                 variant="standard"
                 color="secondary"
-                sx={{ input: { color: "white" } }}
+                sx={{ input: { color: "white" ,backgroundColor:"rgba(0,0,0,0)",boxShadow: "none",marginBottom:"20px"} }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyPress={handleKeyPress} // Listen for the Enter key

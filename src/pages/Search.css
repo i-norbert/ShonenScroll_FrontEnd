@@ -15,13 +15,24 @@ body {
 }
 
 
-.search-results {
+.manga-list {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     justify-content: center;
     margin-top: 20px;
 }
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    color: #fff;
+}
+
 
 .manga-item {
     background-color: #1f1f1f;
@@ -31,6 +42,12 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
     color: #BC6FF1;
+    
+}
+.manga-card{
+    color: white;
+    width: 13rem;
+    height: 30rem;
 }
 
 .manga-cover {
@@ -50,6 +67,11 @@ body {
 button:disabled {
     background-color: #444;
     cursor: not-allowed;
+}
+
+.manga-card-link{
+    text-decoration: none;
+   
 }
 
 .pagination {

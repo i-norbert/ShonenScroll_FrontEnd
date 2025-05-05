@@ -58,7 +58,7 @@ export default function Register() {
                 label="Username"
                 variant="standard"
                 color="secondary"
-                sx={{ input: { color: "white" } }}
+                sx={{ input: { color: "white" ,backgroundColor:"rgba(0,0,0,0)",boxShadow: "none"} }}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 onKeyPress={handleKeyPress} // Listen for the Enter key
@@ -69,7 +69,7 @@ export default function Register() {
                 label="Email"
                 variant="standard"
                 color="secondary"
-                sx={{ input: { color: "white" } }}
+                sx={{ input: { color: "white" ,backgroundColor:"rgba(0,0,0,0)",boxShadow: "none"} }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyPress={handleKeyPress} // Listen for the Enter key

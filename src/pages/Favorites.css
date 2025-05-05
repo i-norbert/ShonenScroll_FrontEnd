@@ -27,3 +27,8 @@
     background-color: #ff69b4;  /* Pink background on hover */
     color: #fff;  /* White text when hovered */
 }
+
+.manga-item:hover{
+    box-shadow: #ff69b4 0px 0px 20px;
+    transition:0.5s box-shadow ;
+}

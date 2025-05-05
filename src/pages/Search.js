@@ -94,7 +94,7 @@ export default function Search() {
                     label="Search by Title"
                     variant="standard"
                     color="secondary"
-                    sx={{ input: { color: "white" } }}
+                    sx={{ input: { color: "white" ,backgroundColor:"rgba(0,0,0,0)",boxShadow: "none",marginBottom:"20px"} }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     fullWidth
@@ -104,7 +104,7 @@ export default function Search() {
                     label="Search by Author"
                     variant="standard"
                     color="secondary"
-                    sx={{ input: { color: "white" } }}
+                    sx={{ input: { color: "white" ,backgroundColor:"rgba(0,0,0,0)",boxShadow: "none",marginBottom:"20px"} }}
                     value={authorQuery}
                     onChange={(e) => setAuthorQuery(e.target.value)}
                     fullWidth
@@ -127,7 +127,7 @@ export default function Search() {
 
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     sx={{ mt: 2, width: '100%' }}
                     onClick={() => handleSearch(1)}
                     disabled={loading}
@@ -155,7 +155,7 @@ export default function Search() {
                                 <h3 className="manga-title">{manga.title}</h3>
                                 <p className="manga-author">Author: {manga.author}</p>
                                 <div
-                                    className={`favorite-icon ${isLikedByUser(manga.id) ? "favorited" : ""}`}
+                                    className={`favorite-icon-button ${isLikedByUser(manga.id) ? "favorited" : ""}`}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();

@@ -43,11 +43,14 @@ body {
     position: relative;
 }
 
+
 .nav-item .icon {
     font-size: 1.5rem;
     margin-bottom: 0.2rem;
     transition: transform 0.3s ease, color 0.3s ease;
 }
+
+
 
 .nav-item:hover {
     color: #ff57d2;
@@ -76,6 +79,7 @@ body {
 
 .profile-pic:hover {
     transform: scale(1.01);
+   
 }
 
 @media screen and (max-width: 768px) {

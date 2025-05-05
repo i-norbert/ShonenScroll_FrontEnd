@@ -101,8 +101,8 @@ const UserProfile = () => {
 </div>
                         </label>
                         <div className="button-group">
-                            <button type="submit" className="neon-button">Save</button>
-                            <button type="button" className="neon-button danger" onClick={() => setEditing(false)}>Cancel</button>
+                            <button type="submit"  className="neon-button">Save</button>
+                            <button type="button"  className="neon-button" onClick={() => setEditing(false)}>Cancel</button>
                         </div>
                     </form>
                 ) : (

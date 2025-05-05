@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import API_BASE from "../ApiBase";
 import styles from "./Home.module.css";
+import  "./Home.css";
 
 const Home = () => {
     const { user } = useContext(UserContext);
@@ -121,7 +122,7 @@ const Home = () => {
             <p className={styles["home-description"]}>Dive into the world of manga!</p>
             <div className={styles["manga-list"]}>
                 {mangas.map((manga) => (
-                    <Link key={manga.id} to={`/reading/${manga.id}`}>
+                    <Link key={manga.id} to={`/reading/${manga.id}`} className={styles["link"]}>
                         <div className={styles["manga-card"]}>
                             <img
                                 src={`${API_BASE}${manga.coverImage}`}
@@ -133,15 +134,17 @@ const Home = () => {
                                 <p>Author: {manga.author}</p>
 
                                 <div
-                                    className={styles[`favorite-icon-button`]+ (isLikedByUser(manga) ? styles.favorited : "")}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        handleLikeToggle(manga.id, isLikedByUser(manga));
-                                    }}
-                                >
-                                    <i className="fas fa-heart"/>
-                                </div>
+                                        className={`favorite-icon-button ${
+                                            isLikedByUser(manga) ? "favorited" : ""
+                                        }`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleLikeToggle(manga.id, isLikedByUser(manga));
+                                        }}
+                                    >
+                                        <i className="fas fa-heart" />
+                                    </div>
                             </div>
                         </div>
                     </Link>
